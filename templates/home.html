@@ -2,36 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Proposal Management System</title>
+  <title>Proposal Manager</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       color: #fff;
+      overflow-x: hidden;
     }
-    .navbar {
-      background: rgba(0, 0, 0, 0.6);
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      background: rgba(5, 2, 2, 0.85);
+      padding: 2rem 1rem;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1000;
     }
-    .hero {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+    .sidebar.active {
+      transform: translateX(0);
+
+
+    }
+
+    .sidebar h4 {
+      color: #fdbb2d;
+      margin-bottom: 2rem;
       text-align: center;
     }
+
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: background 0.2s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Menu Toggle Icon */
+    .menu-toggle {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1100;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fdbb2d;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 0;
+      padding: 2rem;
+      transition: margin-left 0.3s ease-in-out;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
     .hero h1 {
-      font-size: 3rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: bold;
+      margin-bottom: 1rem;
     }
     .hero p {
-      font-size: 1.2rem;
-      margin-top: 1rem;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      max-width: 600px;
     }
+
+
     .btn-custom {
       margin-top: 2rem;
       padding: 0.75rem 2rem;
@@ -42,72 +109,101 @@
       color: #000;
       transition: all 0.3s ease-in-out;
     }
+
     .btn-custom:hover {
       background: #ffcc55;
       transform: scale(1.05);
     }
+
     footer {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 1rem;
+      margin-top: 4rem;
       text-align: center;
       font-size: 0.9rem;
+      color: #eee;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar.active ~ .main-content {
+        margin-left: 250px;
+      }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">Proposal Manager</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('upload') }}">Upload Proposal</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('search') }}">Search</a>
-                </li>
-                <!-- About Us link -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('about') }}">About Us</a>
-                </li>
-                <!-- Settings link -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
-                </li>
-                <!-- Conditionally show Login/Logout -->
-                {% if user_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</nav>
 
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <h4>Proposal Manager</h4>
+  <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+  <a href="{{ url_for('track') }}">🗂 Proposal Tracking</a>
+  <a href="{{ url_for('clients') }}">👥 Client Portal</a>
+  <a href="{{ url_for('search') }}">🔍 Search & Filter</a>
+  <a href="{{ url_for('export') }}">📤 Export & Share</a>
+  <a href="{{ url_for('analytics') }}">📈 Analytics</a>
+  <a href="{{ url_for('upload') }}"> ➕ Add Proposal</a>
 
-  <!-- Hero Section -->
-  <div class="hero container">
-    <div>
-      <h1>Welcome to the Proposal Management System</h1>
-      <p>Easily upload, manage, search, and download proposals with a modern and user-friendly interface.</p>
-      <a href="{{ url_for('search') }}" class="btn btn-custom">Get Started</a>
-    </div>
+  <hr class="text-white">
+  <a href="{{ url_for('about') }}">ℹ️ About</a>
+  <a href="{{ url_for('settings') }}">⚙️ Settings</a>
+  {% if user_authenticated %}
+    <a href="{{ url_for('logout') }}">🔐 Logout</a>
+  {% else %}
+    <a href="{{ url_for('login') }}">🔑 Login</a>
+  {% endif %}
+  <hr class="text-white">
+  <a href="{{ url_for('home') }}">🏠 Home</a>
+
+</div>
+
+<!-- Toggle Button -->
+<button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+  <div class="container hero">
+    <h1>Welcome to Proposal Manager</h1>
+    <p>Easily upload, manage, search, and download proposals with a modern and user-friendly interface.</p>
+    <a href="{{ url_for('search') }}" class="btn btn-custom">Get Started</a>
   </div>
 
-  <!-- Footer -->
   <footer>
     <p>&copy; {{ year }} Proposal Manager. All rights reserved.</p>
   </footer>
+</div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('mainContent');
+    const menuToggle = document.getElementById('menuToggle');
+
+    sidebar.classList.toggle('active');
+    main.classList.toggle('active');
+
+    // Toggle menu button visibility
+    if (sidebar.classList.contains('active')) {
+      menuToggle.style.display = 'none';
+    } else {
+      menuToggle.style.display = 'block';
+    }
+  }
+
+  // Close sidebar when any sidebar link is clicked
+  document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebar');
+      const main = document.getElementById('mainContent');
+      const menuToggle = document.getElementById('menuToggle');
+
+      sidebar.classList.remove('active');
+      main.classList.remove('active');
+      menuToggle.style.display = 'block'; // Show menu again
+    });
+  });
+</script>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

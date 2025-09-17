@@ -2,14 +2,170 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>About Us - Proposal Manager</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>About Us – PropMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Reset and Global */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.75;
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+      margin: 0;
+      padding: 0;
+      color: #1f2937;
+    }
+
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    h1, h2, h3 {
+      color: #1e3a8a;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-top: 30px;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    p, ul {
+      max-width: 900px;
+      margin: 0 auto 1.2em auto;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    ul li::marker {
+      color: #10b981; /* Emerald bullet */
+    }
+
+    strong {
+      color: #111827;
+    }
+
+    /* Container Card */
+    .content-wrapper {
+      background-color: #ffffffcc;
+      backdrop-filter: blur(3px);
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #1e3a8a;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+  </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h1>About Us</h1>
-    <p>We are a team dedicated to providing seamless proposal management solutions. Our platform allows users to upload, manage, and search for proposals with ease.</p>
-    <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+
+  <h1>About Us</h1>
+
+  <div class="content-wrapper">
+    <p>We are a team dedicated to providing <strong>seamless proposal management solutions</strong>. Our platform allows users to <strong>upload</strong>, <strong>manage</strong>, and <strong>search</strong> for proposals with ease.</p>
+
+    <h2>Welcome to PropMan</h2>
+    <p><strong>PropMan</strong> is a smart, secure, and efficient platform for managing proposals in both academic and professional environments.</p>
+    <p>Whether you're part of a <em>university research department</em> submitting grant proposals or a <em>corporate team</em> handling client RFPs, PropMan simplifies and centralizes your entire proposal workflow.</p>
+
+    <h2>Our Purpose</h2>
+    <p>PropMan was created to eliminate the complexity and fragmentation in traditional proposal processes. We bring everything — from drafting and collaboration to submission and archiving — under one intuitive platform.</p>
+
+    <h2>Who We Serve</h2>
+
+    <h3>🎓 Academic & Research Institutions</h3>
+    <ul>
+      <li>Submit, store, and retrieve research proposals</li>
+      <li>Track submissions by department, funding agency, or research field</li>
+      <li>Ensure compliance with grant guidelines and institutional standards</li>
+    </ul>
+
+    <h3>🏢 Corporate & Industry Teams</h3>
+    <ul>
+      <li>Manage business proposals, RFPs, tenders, and technical documents</li>
+      <li>Collaborate across departments with version control</li>
+      <li>Search, filter, and audit historical submissions for insights and compliance</li>
+    </ul>
+
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>🔍 Advanced Search:</strong> Quickly find proposals by title, standard, industry, or keywords</li>
+      <li><strong>📂 Secure Document Upload:</strong> Centralize files with organized metadata</li>
+      <li><strong>👥 User Roles:</strong> Control access with secure login and role-based permissions</li>
+      <li><strong>🕒 Activity Tracking:</strong> Know who submitted what and when</li>
+      <li><strong>📈 Scalable:</strong> Designed to grow with your organization</li>
+    </ul>
+
+    <h2>Our Mission</h2>
+    <p>To empower academic and corporate teams with the tools they need to manage proposal lifecycles with clarity, control, and confidence.</p>
+
+    <h2>Contact Us</h2>
+    <ul>
+      <li><strong>Email:</strong> <a href="mailto:support@propman.org">support@propman.org</a></li>
+      <li><strong>Phone:</strong> +1 (123) 456-7890</li>
+      <li><strong>Website:</strong> <a href="http://www.propman.org" target="_blank">www.propman.org</a></li>
+    </ul>
   </div>
+
+  <footer>
+    &copy; 2025 PropMan. All rights reserved.
+  </footer>
+
 </body>
 </html>

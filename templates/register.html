@@ -1,7 +1,143 @@
 <!-- templates/register.html -->
-<h2>Register</h2>
-<form method="POST">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .register-card {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 340px;
+      text-align: center;
+      animation: slideFadeIn 0.8s ease;
+    }
+
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      width: 60px;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      font-size: 14px;
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      background-color: #fff;
+      color: #000;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #fdbb2d;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #fdbb2d;
+      border: none;
+      color: #000;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #ffcc55;
+      transform: scale(1.05);
+    }
+
+    .login-link {
+      margin-top: 1rem;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #fdbb2d;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      width: 100%;
+      color: #fff;
+      position: absolute;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="register-card">
+    <!-- Logo -->
+    <img src="/static/logo.png" alt="Logo" class="logo"> <!-- Replace with your logo path -->
+
+    <h2>Register</h2>
+
+    <!-- Error Message Example (Jinja2 style) -->
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="login-link">
+        Already have an account? <a href="/login">Login here</a>
+    </div>
+</div>
+
+</body>
+</html>

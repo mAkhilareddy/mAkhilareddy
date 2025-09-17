@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Track Proposals{% endblock %}
+
+{% block content %}
+<h2 class="mt-4 mb-4">Track Your Proposals</h2>
+
+{% if proposals %}
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Standard</th>
+                <th>Industry</th>
+                <th>Uploaded At</th>
+                <th>File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proposal in proposals %}
+                <tr>
+                    <td>{{ proposal.title }}</td>
+                    <td>{{ proposal.description }}</td>
+                    <td>{{ proposal.standard }}</td>
+                    <td>{{ proposal.industry }}</td>
+                    <td>{{ proposal.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {% if proposal.filename %}
+                            <a href="{{ url_for('download', proposal_id=proposal.id) }}" class="btn btn-sm btn-primary">Download</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No proposals uploaded yet.</p>
+{% endif %}
+{% endblock %}

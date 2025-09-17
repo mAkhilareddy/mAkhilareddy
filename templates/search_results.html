@@ -9,10 +9,10 @@
     rel="stylesheet"
   />
   <style>
-    body { background: #0f172a; color: #e2e8f0; }
-    .navbar { background: rgba(0,0,0,0.5); }
-    .card { background: rgba(255,255,255,0.06); border: none; }
-    .card:hover { background: rgba(255,255,255,0.1); }
+    body { background: #c2c5c7; color: #12161b; }
+    .navbar { background: rgba(2, 1, 1, 0.5); }
+    .card { background: rgba(15, 5, 5, 0.06); border: none; }
+    .card:hover { background: rgb(238, 230, 230); }
   </style>
 </head>
 <body>
@@ -42,6 +42,7 @@
         <option value="compliance" {% if request.args.get('standard') == 'compliance' %}selected{% endif %}>Compliance</option>
         <option value="reengineering" {% if request.args.get('standard') == 'reengineering' %}selected{% endif %}>Re-engineering</option>
         <option value="obsolescence" {% if request.args.get('standard') == 'obsolescence' %}selected{% endif %}>Obsolescence</option>
+        <option value="IEEE 1547" {% if request.args.get('standard') == 'IEEE 1547' %}selected{% endif %}>IEEE 1547</option>
       </select>
     </div>
       <div class="col-md-2">
@@ -84,6 +85,7 @@
       <p class="text-secondary">No proposals found. Try adjusting your search.</p>
     {% endif %}
   </main>
+
   <footer class="text-center py-3 border-top border-secondary">
     <small>&copy; {{ year }} Proposal Manager. All rights reserved.</small>
   </footer>

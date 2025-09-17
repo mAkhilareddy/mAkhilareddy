@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <h2>Dashboard</h2>
+
+  <!-- KPI Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary">
+        <div class="card-header">Total Proposals</div>
+        <div class="card-body">
+          <h4 class="card-title">{{ total_proposals }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-header">Your Proposals</div>
+        <div class="card-body">
+          <h4 class="card-title">{{ user_proposals }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts and Recent Proposals -->
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <h5>Proposals by Industry</h5>
+      <div style="height: 300px;">
+        <canvas id="industryChart"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <h5>Recent Proposals</h5>
+      <ul class="list-group">
+        {% for p in proposals[:5] %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ p.title }}
+            <a href="{{ url_for('download', proposal_id=p.id) }}" class="btn btn-sm btn-outline-primary">Download</a>
+          </li>
+        {% else %}
+          <li class="list-group-item">No proposals found.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+  <div class="col-md-2">
+    <select id="filterYear" class="form-control">
+      <option value="">All Years</option>
+      {% for y in range(2021, 2026) %}
+        <option value="{{ y }}">{{ y }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select id="filterMonth" class="form-control">
+      <option value="">All Months</option>
+      {% for m in range(1, 13) %}
+        <option value="{{ m }}">{{ m }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-primary" onclick="loadDashboardData()">Filter</button>
+  </div>
+</div>
+
+
+  <!-- Proposal Table -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h5>Recent Uploads</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Industry</th>
+            <th>Standard</th>
+            <th>Uploaded At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in proposals[:5] %}
+            <tr>
+              <td>{{ p.title }}</td>
+              <td>{{ p.industry }}</td>
+              <td>{{ p.standard }}</td>
+              <td>{{ p.uploaded_at.strftime('%Y-%m-%d') }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="4">No recent proposals.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Trend Chart -->
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <h5>Regional Trends</h5>
+      <div style="height: 400px;">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-outline-secondary mt-3" onclick="downloadChart('industryChart', 'industry_chart')">Export Industry Chart</button>
+<button class="btn btn-outline-secondary mt-3" onclick="downloadChart('trendChart', 'trend_chart')">Export Trend Chart</button>
+
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Industry Chart -->
+<script>
+  try {
+    const industryLabels = {{ industries | map(attribute=0) | list | tojson }};
+    const industryData = {{ industries | map(attribute=1) | list | tojson }};
+
+    const industryCtx = document.getElementById('industryChart').getContext('2d');
+    new Chart(industryCtx, {
+      type: 'pie',
+      data: {
+        labels: industryLabels,
+        datasets: [{
+          label: 'Industry Count',
+          data: industryData,
+          backgroundColor: [
+            '#FF6384', '#36A2EB', '#FFCE56',
+            '#4BC0C0', '#9966FF', '#E7E9ED'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: 'Proposals by Industry'
+          }
+        }
+      }
+    });
+  } catch (err) {
+    console.error("Industry Chart Error:", err);
+  }
+
+  async function loadDashboardData() {
+  try {
+    const year = document.getElementById('filterYear').value;
+    const month = document.getElementById('filterMonth').value;
+
+    const url = new URL('/api/dashboard-data', window.location.origin);
+    if (year) url.searchParams.append('year', year);
+    if (month) url.searchParams.append('month', month);
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const industryLabels = data.industries.map(item => item[0]);
+    const industryCounts = data.industries.map(item => item[1]);
+
+    const trendData = data.trends;
+    const trendLabels = trendData.map(d => d.year);
+
+    const trendDatasets = [
+      {
+        label: 'Europe',
+        data: trendData.map(d => d.europe),
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+      },
+      {
+        label: 'North America',
+        data: trendData.map(d => d.namerica),
+        backgroundColor: 'rgba(255, 99, 132, 0.6)'
+      },
+      {
+        label: 'Asia',
+        data: trendData.map(d => d.asia),
+        backgroundColor: 'rgba(255, 206, 86, 0.6)'
+      },
+      {
+        label: 'Latin America',
+        data: trendData.map(d => d.lamerica),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+      },
+      {
+        label: 'Middle East',
+        data: trendData.map(d => d.meast),
+        backgroundColor: 'rgba(153, 102, 255, 0.6)'
+      },
+      {
+        label: 'Africa',
+        data: trendData.map(d => d.africa),
+        backgroundColor: 'rgba(255, 159, 64, 0.6)'
+      }
+    ];
+
+    renderIndustryChart(industryLabels, industryCounts);
+    renderTrendChart(trendLabels, trendDatasets);
+
+  } catch (err) {
+    console.error("Failed to load dashboard data:", err);
+  }
+}
+</script>
+
+<!-- Trend Chart -->
+<script>
+  try {
+    const trendData = {{ chart_data | tojson }};
+    const trendLabels = trendData.map(d => d.year);
+
+    const trendDatasets = [
+      {
+        label: 'Europe',
+        data: trendData.map(d => d.europe),
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+      },
+      {
+        label: 'North America',
+        data: trendData.map(d => d.namerica),
+        backgroundColor: 'rgba(127, 99, 132, 0.6)'
+      },
+      {
+        label: 'Asia',
+        data: trendData.map(d => d.asia),
+        backgroundColor: 'rgba(255, 206, 86, 0.6)'
+      },
+      {
+        label: 'Latin America',
+        data: trendData.map(d => d.lamerica),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+      },
+      {
+        label: 'Middle East',
+        data: trendData.map(d => d.meast),
+        backgroundColor: 'rgba(153, 102, 255, 0.6)'
+      },
+      {
+        label: 'Africa',
+        data: trendData.map(d => d.africa),
+        backgroundColor: 'rgba(255, 159, 64, 0.6)'
+      }
+    ];
+
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trendCtx, {
+      type: 'bar',
+      data: {
+        labels: trendLabels,
+        datasets: trendDatasets
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: 'Proposal Upload Trends by Region'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  } catch (err) {
+    console.error("Trend Chart Error:", err);
+  }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<button class="btn btn-outline-secondary mt-3" onclick="exportChartsToPDF()">Export All to PDF</button>
+
+<script>
+  async function exportChartsToPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const industryCanvas = document.getElementById("industryChart");
+    const trendCanvas = document.getElementById("trendChart");
+
+    doc.text("Industry Chart", 10, 10);
+    doc.addImage(industryCanvas.toDataURL(), 'PNG', 10, 15, 180, 80);
+
+    doc.text("Trend Chart", 10, 105);
+    doc.addImage(trendCanvas.toDataURL(), 'PNG', 10, 110, 180, 80);
+
+    doc.save("dashboard_charts.pdf");
+  }
+
+  function downloadChart(chartId, filename) {
+  const canvas = document.getElementById(chartId);
+  const link = document.createElement('a');
+  link.download = filename + '.png';
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+</script>
+
+{% endblock %}
