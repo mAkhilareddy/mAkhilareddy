@@ -4,17 +4,58 @@
   <meta charset="UTF-8" />
   <title>Search Proposals</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
   <style>
-    body { background: #c2c5c7; color: #12161b; }
-    .navbar { background: rgba(2, 1, 1, 0.5); }
-    .card { background: rgba(15, 5, 5, 0.06); border: none; }
-    .card:hover { background: rgb(238, 230, 230); }
+    body {
+      background: #c2c5c7;
+      color: #12161b;
+    }
+    .navbar {
+      background: rgba(2, 1, 1, 0.5);
+    }
+    .card {
+      background: rgba(15, 5, 5, 0.06);
+      border: none;
+    }
+    .card:hover {
+      background: rgb(238, 230, 230);
+    }
+
+    /* Dropdown hover feel */
+    select {
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    select:hover {
+      background-color: #fff8e1;
+      border-color: #f0ad4e;
+    }
+    
+
+    /* Prevent page jump on hover expansion */
+    .select-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    /* Expanded dropdown floats above */
+    .select-wrapper select.expanded {
+      position: absolute;
+      z-index: 10;
+      background-color: #fff;
+      border: 1px solid #f0ad4e;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.25s ease;
+    }
+    .custom-select-options li:hover { background: #ffe082; }
+    .custom-select-container.active .custom-select-options { display: block; }
   </style>
 </head>
+
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark px-3">
     <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">Proposal Manager</a>
@@ -27,47 +68,55 @@
   <main class="container my-4">
     <h3 class="mb-3">Search Proposals</h3>
 
-    <form method="get" action="{{ url_for('search') }}" class="row g-3 mb-4">
+    <!-- Search Form -->
+    <form method="get" action="{{ url_for('search') }}" class="row g-3 mb-4" autocomplete="off">
       <div class="col-md-3">
-        <input type="text" name="keyword" value="{{ request.args.get('keyword','') }}" class="form-control" placeholder=" Search by title keyword">
+        <input type="text" name="keyword" class="form-control" placeholder="Search by title keyword" autocomplete="off">
       </div>
       <div class="col-md-3">
-        <input type="text" name="description" value="{{ request.args.get('description','') }}" class="form-control" placeholder="Description keyword">
+        <input type="text" name="description" class="form-control" placeholder="Description keyword" autocomplete="off">
       </div>
+
+      <!-- Standard Dropdown -->
       <div class="col-md-2">
-        <select name="standard" class="form-select" >
-        <option value="">All Standards</option>
-        <option value="npi" {% if request.args.get('standard') == 'npi' %}selected{% endif %}>NPI/NPD</option>
-        <option value="vave" {% if request.args.get('standard') == 'vave' %}selected{% endif %}>VAVE</option>
-        <option value="compliance" {% if request.args.get('standard') == 'compliance' %}selected{% endif %}>Compliance</option>
-        <option value="reengineering" {% if request.args.get('standard') == 'reengineering' %}selected{% endif %}>Re-engineering</option>
-        <option value="obsolescence" {% if request.args.get('standard') == 'obsolescence' %}selected{% endif %}>Obsolescence</option>
-        <option value="IEEE 1547" {% if request.args.get('standard') == 'IEEE 1547' %}selected{% endif %}>IEEE 1547</option>
-      </select>
-    </div>
-      <div class="col-md-2">
-        <select name="industry" class="form-select" >
-           <option value="">All Industries</option>
-                <option value="automotive" {% if request.args.get('industry') == 'automotive' %}selected{% endif %}>Automotive</option>
-                <option value="mechanical" {% if request.args.get('industry') == 'mechanical' %}selected{% endif %}>Mechanical</option>
-                <option value="powerelectronics" {% if request.args.get('industry') == 'powerelectronics' %}selected{% endif %}>PowerElectronics</option>
-                <option value="electrical" {% if request.args.get('industry') == 'electrical' %}selected{% endif %}>Electrical</option>
-                <option value="semiconductor" {% if request.args.get('industry') == 'semiconductor' %}selected{% endif %}>Semiconductor</option>
-        </select>
+        <div class="select-wrapper">
+          <select name="standard" class="form-select auto-dropdown" autocomplete="off">
+            <option value="">All Standards</option>
+            <option value="npi">NPI/NPD</option>
+            <option value="vave">VAVE</option>
+            <option value="compliance">Compliance</option>
+            <option value="reengineering">Re-engineering</option>
+            <option value="obsolescence">Obsolescence</option>
+            <option value="IEEE 1547">IEEE 1547</option>
+          </select>
+        </div>
       </div>
+
+      <!-- Industry Dropdown -->
+      <div class="col-md-2">
+        <div class="select-wrapper">
+          <select name="industry" class="form-select auto-dropdown" autocomplete="off">
+            <option value="">All Industries</option>
+            <option value="automotive">Automotive</option>
+            <option value="mechanical">Mechanical</option>
+            <option value="powerelectronics">PowerElectronics</option>
+            <option value="electrical">Electrical</option>
+            <option value="semiconductor">Semiconductor</option>
+          </select>
+        </div>
+      </div>
+
       <div class="col-md-2 d-grid">
         <button type="submit" class="btn btn-warning">Search</button>
       </div>
     </form>
 
-    {% if results %}
+    {% if results is defined and results %}
       <h5 class="mb-3">Found {{ results|length }} result(s)</h5>
       {% for proposal in results %}
         <div class="card p-3 mb-3">
           <h5 class="mb-1">{{ proposal.title }}</h5>
-          <div class="small text-secondary mb-2">
-            {{ proposal.standard }} • {{ proposal.industry }}
-          </div>
+          <div class="small text-secondary mb-2">{{ proposal.standard }} • {{ proposal.industry }}</div>
           <p class="mb-2">{{ proposal.description or "No description available." }}</p>
           <div class="small text-secondary mb-3">
             Uploaded: {{ proposal.uploaded_at.strftime("%Y-%m-%d %H:%M:%S") }}
@@ -81,17 +130,62 @@
           </div>
         </div>
       {% endfor %}
-    {% else %}
+    {% elif results is defined %}
       <p class="text-secondary">No proposals found. Try adjusting your search.</p>
+    {% else %}
+      <p class="text-secondary">Use the form above to search proposals.</p>
     {% endif %}
   </main>
 
   <footer class="text-center py-3 border-top border-secondary">
     <small>&copy; {{ year }} Proposal Manager. All rights reserved.</small>
   </footer>
-
-
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Smooth hover-to-open logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const selects = document.querySelectorAll('.auto-dropdown');
+      selects.forEach(select => {
+        let hoverTimeout;
+
+        select.addEventListener('mouseenter', function () {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = setTimeout(() => {
+            this.classList.add('expanded');
+            this.size = Math.min(this.options.length, 6);
+          }, 100);
+        });
+
+        select.addEventListener('mouseleave', function () {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = setTimeout(() => {
+            this.classList.remove('expanded');
+            this.size = 1;
+          }, 150);
+        });
+
+        select.addEventListener('focus', function () {
+          this.classList.add('expanded');
+          this.size = Math.min(this.options.length, 6);
+        });
+
+        select.addEventListener('blur', function () {
+          this.classList.remove('expanded');
+          this.size = 1;
+        });
+
+        select.addEventListener('change', function () {
+          this.classList.remove('expanded');
+          this.size = 1;
+          this.blur();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
+
+
 

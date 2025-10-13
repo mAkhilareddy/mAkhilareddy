@@ -1,9 +1,10 @@
+
 {% extends "base.html" %}
-
-{% block title %}Export{% endblock %}
-
 {% block content %}
-  <h1 class="mt-4">Export</h1>
-  <p>Welcome to the export page. Add your export logic here.</p>
+<div class="container mt-4">
+  <h3>📤 Export Proposals</h3>
+  <p>You can download your uploaded proposals as a CSV file for analysis or backup.</p>
+  <a href="{{ url_for('export_data') }}" class="btn btn-success mt-3">Download CSV</a>
+</div>
 {% endblock %}
 

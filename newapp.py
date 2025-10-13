@@ -42,7 +42,6 @@ class ProposalComment(db.Model):
     message = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-
 # -------------------- App Factory --------------------
 def create_app():
     app = Flask(__name__)
@@ -81,7 +80,7 @@ def create_app():
             if user and check_password_hash(user.password_hash, password):
                 login_user(user)
                 flash("Logged in successfully!", "success")
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('home'))
             else:
                 error = "Invalid username or password"
         return render_template('login.html', error=error)
@@ -148,24 +147,32 @@ def create_app():
 
     @app.route("/search")
     def search():
-        keyword = request.args.get("keyword", "")
-        description = request.args.get("description", "")
-        standard = request.args.get("standard", "")
-        industry = request.args.get("industry", "")
+        keyword = request.args.get("keyword", "").strip()
+        description = request.args.get("description", "").strip()
+        standard = request.args.get("standard", "").strip()
+        industry = request.args.get("industry", "").strip()
+
         
         query = Proposal.query
+
         if keyword:
-            query = query.filter(Proposal.title.contains(keyword))
+            query = query.filter(Proposal.title.ilike(f"%{keyword}%"))
         if description:
-            query = query.filter(Proposal.description.contains(description))
-        if standard:
-            query = query.filter(Proposal.standard.contains(standard))
-        if industry:
-            query = query.filter(Proposal.industry.contains(industry))
+            query = query.filter(Proposal.description.ilike(f"%{description}%"))
+        #if standard:
+          #query = query.filter(Proposal.standard.ilike(f"%{standard}%"))
+        #if industry:
+            #query = query.filter(Proposal.industry.ilike(f"%{industry}%"))
+             # Only filter if not 'all' or empty
+        if standard and standard.lower() not in ['all', 'all standards']:
+            query = query.filter(Proposal.standard == standard)
+        if industry and industry.lower() not in ['all', 'all industries']:
+            query = query.filter(Proposal.industry == industry)
+
                         
         results = query.all()
         
-        return render_template("search_results.html", results=results)
+        return render_template("search_results.html", results=results, year=datetime.now().year)
 
 
     @app.route("/download/<int:proposal_id>")
@@ -236,9 +243,34 @@ def create_app():
         return render_template('track.html', proposals=user_proposals)
 
 
+    #@app.route('/clients')
+    #def clients():
+      #return render_template('clients.html')
+
+    #@app.route('/clients')
+    #@login_required
+    #def clients():
+        #clients = User.query.filter_by(is_client=True).all()
+        #client_data = []
+        #for c in clients:
+            #proposal_count = Proposal.query.filter_by(user_id=c.id).count()
+            #client_data.append({"username": c.username, "email": c.email, "count": proposal_count})
+        #return render_template('clients.html', clients=client_data)
+
     @app.route('/clients')
     def clients():
-      return render_template('clients.html')
+    # Example: Fetch client data from the database
+      clients = [
+          {"id": 1, "name": "Tata Motors", "industry": "Automotive", "projects": 12, "status": "Active"},
+          {"id": 2, "name": "Siemens", "industry": "Electrical", "projects": 8, "status": "Active"},
+          {"id": 3, "name": "Bosch", "industry": "Power Electronics", "projects": 10, "status": "Inactive"},
+          {"id": 4, "name": "ABB", "industry": "Automation", "projects": 6, "status": "Active"},
+          
+          ]
+      
+      return render_template("clients.html", clients=clients)
+
+    
 
     @app.route('/about')
     def about():
@@ -248,14 +280,58 @@ def create_app():
     def settings():
       return render_template('Settings.html')
 
+    #@app.route('/export')
+    #def export():
+      #return render_template('export.html')
+    
     @app.route('/export')
+    @login_required
     def export():
-      return render_template('export.html')
+        proposals = Proposal.query.filter_by(user_id=current_user.id).all()
+        data = [
+            {
+                "Title": p.title,
+                "Description": p.description,
+                "Standard": p.standard,
+                "Industry": p.industry,
+                "Uploaded": p.uploaded_at.strftime("%Y-%m-%d"),
+                }
+                for p in proposals
+                ]
+        import pandas as pd
+        df = pd.DataFrame(data)
+        file_path = "exported_proposals.csv"
+        df.to_csv(file_path, index=False)
+        return send_from_directory(".", file_path, as_attachment=True)
+
 
 
     @app.route('/analytics')
+    @login_required
     def analytics():
-      return render_template('analytics.html')
+        total_proposals = Proposal.query.count()
+        by_standard = db.session.query(
+            Proposal.standard, db.func.count(Proposal.id)
+            ).group_by(Proposal.standard).all()
+        
+        by_industry = db.session.query(
+            Proposal.industry, db.func.count(Proposal.id)
+            ).group_by(Proposal.industry).all()
+        
+        monthly_trends = db.session.query(
+            db.func.strftime("%Y-%m", Proposal.uploaded_at),
+            db.func.count(Proposal.id)
+            ).group_by(db.func.strftime("%Y-%m", Proposal.uploaded_at)).all()
+        
+        return render_template(
+            'analytics.html',
+            total_proposals=total_proposals,
+            by_standard=by_standard,
+            by_industry=by_industry,
+            monthly_trends=monthly_trends
+            
+            )
+
 
 
     @app.route("/delete/<int:proposal_id>", methods=['POST'])
