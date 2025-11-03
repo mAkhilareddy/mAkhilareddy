@@ -4,10 +4,9 @@ from datetime import datetime
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
-#from yourpackage import db
 from werkzeug.utils import secure_filename
 import os, uuid
-#from .models import CaseStudy
+
 
 
 # -------------------- Extensions --------------------
@@ -131,28 +130,8 @@ def create_app():
         flash("Logged out successfully", "info")
         return redirect(url_for('home'))
     
-
-    #UPLOAD_FOLDER_CASESTUDY = 'uploads/casestudy'
-    #os.makedirs(UPLOAD_FOLDER_CASESTUDY, exist_ok=True)
-    #@app.route('/case_study', methods=['GET', 'POST'])
-    #@login_required
-    #def case_study():
-        #if request.method == 'POST':
-            #title = request.form['title']
-            #description = request.form['description']
-            #file = request.files['file']
-            #if file:
-                #filename = file.filename
-                #filepath = os.path.join(UPLOAD_FOLDER_CASESTUDY, filename)
-                #file.save(filepath)
-               # new_case = CaseStudy(title=title, description=description, filename=filename)
-                #db.session.add(new_case)
-                #db.session.commit()
-                #flash('Case study uploaded successfully!', 'success')
-                #return redirect(url_for('case_study'))
-        #case_studies = CaseStudy.query.order_by(CaseStudy.uploaded_at.desc()).all()
-        #return render_template('case_study.html', case_studies=case_studies)
     
+
     @app.route('/case_upload', methods=['GET', 'POST'])
     @login_required
     def case_upload():
@@ -197,10 +176,7 @@ def create_app():
     @login_required
     def case_study():return render_template('case_study.html')
 
-    #@app.route('/case_search')
-    #def search():
-        #results = CaseStudy.query.all()  # Load all files from DB
-        #return render_template('case_search.html', results=results, year=datetime.now().year)
+
 
 
     @app.route('/case_search', methods=['GET', 'POST'])
@@ -327,34 +303,7 @@ def create_app():
         return render_template("upload.html")
 
 
-    #@app.route("/search")
-    #def search():
-        #keyword = request.args.get("keyword", "").strip()
-        #description = request.args.get("description", "").strip()
-        #standard = request.args.get("standard", "").strip()
-        #industry = request.args.get("industry", "").strip()
 
-        
-        #query = Proposal.query
-
-        #if keyword:
-            #query = query.filter(Proposal.title.ilike(f"%{keyword}%"))
-        #if description:
-            #query = query.filter(Proposal.description.ilike(f"%{description}%"))
-        #if standard:
-          #query = query.filter(Proposal.standard.ilike(f"%{standard}%"))
-        #if industry:
-            #query = query.filter(Proposal.industry.ilike(f"%{industry}%"))
-             # Only filter if not 'all' or empty
-        #if standard and standard.lower() not in ['all', 'all standards']:
-            #query = query.filter(Proposal.standard == standard)
-        #if industry and industry.lower() not in ['all', 'all industries']:
-            #query = query.filter(Proposal.industry == industry)
-
-                        
-        #results = query.all()
-        
-        #return render_template("search_results.html", results=results, year=datetime.now().year)
     
 
     @app.route('/search', methods=['GET', 'POST'])
@@ -444,19 +393,7 @@ def create_app():
         return render_template('track.html', proposals=user_proposals)
 
 
-    #@app.route('/clients')
-    #def clients():
-      #return render_template('clients.html')
 
-    #@app.route('/clients')
-    #@login_required
-    #def clients():
-        #clients = User.query.filter_by(is_client=True).all()
-        #client_data = []
-        #for c in clients:
-            #proposal_count = Proposal.query.filter_by(user_id=c.id).count()
-            #client_data.append({"username": c.username, "email": c.email, "count": proposal_count})
-        #return render_template('clients.html', clients=client_data)
 
     @app.route('/clients')
     def clients():
