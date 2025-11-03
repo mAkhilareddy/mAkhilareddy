@@ -22,3 +22,39 @@ product developement,"
 Process of designing and launching new product Smart motor controller
 ",npi,All industries,2025-10-10
 Product Development ,"Description: Systematic process to design, engineer, prototype, and launch new products. It ensures that the product meets customer needs, market requirements, and regulatory standards. Includes mechanical, electrical, and software integration.",npi,All industries,2025-10-10
+Smart Motor Controller Development,Design and develop an intelligent motor controller that optimizes energy usage using adaptive algorithms.,npi,powerelectronics,2025-10-16
+Cost Optimization of EV Battery Cooling System,Apply Value Analysis and Value Engineering (VAVE) to minimize material costs while maintaining thermal efficiency.,vave,automotive,2025-10-16
+Firmware Validation Framework for Embedded Systems,Create a test automation framework to validate embedded firmware across multiple hardware platforms.,compliance,semiconductor,2025-10-16
+IoT-based Predictive Maintenance Firmware,"Develop firmware that collects sensor data to predict failures in industrial motors, enhancing uptime.",reengineering,electrical,2025-10-16
+Obsolescence Management of Power Converters,Identify and replace obsolete components in legacy converter systems while ensuring compliance with IEEE 1547.,IEEE 1547,powerelectronics,2025-10-16
+Design Re-engineering of Mechanical Actuator Assembly,Re-engineer an actuator mechanism to improve performance and manufacturability,reengineering,mechanical,2025-10-16
+VAVE Implementation in Semiconductor Packaging,Optimize the IC packaging process to reduce cost per unit and improve throughput.,vave,semiconductor,2025-10-16
+Verification of Autonomous Vehicle Sensors,Develop validation procedures and automated test benches for LiDAR and radar modules.,compliance,automotive,2025-10-16
+Firmware Upgrade for Legacy Control Systems,Migrate outdated firmware to modern microcontrollers ensuring compatibility and performance.,obsolescence,electrical,2025-10-16
+Standardization of Inverter Control under IEEE 1547,Implement standardized control algorithms to ensure compliance with IEEE 1547 for grid-tied inverters.,IEEE 1547,powerelectronics,2025-10-16
+Smart Power Converter Design,Develop a high-efficiency power converter with integrated monitoring for industrial applications.,npi,powerelectronics,2025-10-16
+Electric Vehicle Charger Module,Design and prototype a modular EV charger with adaptive load balancing and fast-charging support.,npi,automotive,2025-10-16
+Advanced Semiconductor Cooling Unit,Develop a thermal management solution for high-power semiconductor devices using liquid cooling.,reengineering,semiconductor,2025-10-16
+Compact Mechanical Actuator System,Design a lightweight and efficient actuator for robotic arms and automation systems.,npi,mechanical,2025-10-16
+Energy-Efficient Inverter Design,Create a new inverter topology for solar energy applications with improved efficiency.,IEEE 1547,electrical,2025-10-16
+Material Optimization in EV Drivetrains,Reduce drivetrain cost by re-evaluating material composition without performance loss.,vave,automotive,2025-10-16
+Cost Reduction in PCB Manufacturing,Apply VAVE techniques to minimize PCB manufacturing costs while maintaining reliability.,vave,semiconductor,2025-10-16
+Lightweight Mechanical Chassis Redesign,Re-engineer mechanical chassis using composite materials for weight reduction.,vave,mechanical,2025-10-16
+Optimization of Industrial Power Supply Units,Redesign PSU components to reduce cost and enhance thermal performance.,vave,electrical,2025-10-16
+Low-Cost Embedded Sensor Development,Create cost-effective sensors for monitoring automotive components using VAVE principles.,vave,automotive,2025-10-16
+Automated Firmware Testing Framework,Develop an automation framework for regression testing of embedded firmware.,compliance,semiconductor,2025-10-16
+Power Electronics System Validation,Build a validation environment for high-voltage converters ensuring IEEE 1547 compliance.,IEEE 1547,powerelectronics,2025-10-16
+Verification of Mechanical Load Sensors,Validate sensor accuracy under dynamic load conditions using test automation tools.,compliance,mechanical,2025-10-16
+Validation of Battery Management Systems,Design test cases and validation methods for EV battery management systems.,compliance,automotive,2025-10-16
+Verification of Grid Synchronization Modules,Verify control firmware in grid-tied systems for compliance with IEEE 1547.,IEEE 1547,electrical,2025-10-16
+Real-Time Firmware for Power Converters,Develop low-latency firmware to control DC-DC converters efficiently.,reengineering,powerelectronics,2025-10-16
+Over-the-Air Firmware Update System,Implement secure OTA update functionality for IoT-enabled automotive devices.,compliance,automotive,2025-10-16
+Component Lifecycle Management in Power Systems,Identify and replace obsolete ICs in converter control boards.,obsolescence,powerelectronics,2025-10-16
+Redesign of Legacy Automotive Control Units,Re-engineer outdated automotive ECUs using modern microcontrollers.,reengineering,automotive,2025-10-16
+Compact Mechanical Actuator System,"
+Design a lightweight and efficient actuator for robotic arms and automation systems.",npi,mechanical,2025-10-16
+Energy-Efficient Inverter Design,Create a new inverter topology for solar energy applications with improved efficiency.,IEEE 1547,electrical,2025-10-16
+VAVE in Semiconductor Obsolescence Replacement,Use VAVE methodology to find cost-efficient alternatives for obsolete semiconductor components.,obsolescence,semiconductor,2025-10-16
+Mechanical Fixture Optimization,Improve mechanical fixture durability while reducing material usage.,reengineering,mechanical,2025-10-16
+VAVE-Based Cost Reduction for Power Modules,Optimize component selection and design to reduce costs in power module manufacturing.,vave,powerelectronics,2025-10-16
+VAVE Implementation in Sensor Packaging,Apply VAVE principles to reduce packaging costs of MEMS sensors.,vave,semiconductor,2025-10-16

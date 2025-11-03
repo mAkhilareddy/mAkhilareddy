@@ -4,7 +4,11 @@ from datetime import datetime
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
+#from yourpackage import db
+from werkzeug.utils import secure_filename
 import os, uuid
+#from .models import CaseStudy
+
 
 # -------------------- Extensions --------------------
 db = SQLAlchemy()
@@ -31,6 +35,7 @@ class Proposal(db.Model):
     standard = db.Column(db.String(100), nullable=True)
     industry = db.Column(db.String(100), nullable=True)
     filename = db.Column(db.String(200), nullable=True)
+    file_size = db.Column(db.Float, nullable=True)  # ✅ new field added
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -41,6 +46,19 @@ class ProposalComment(db.Model):
     proposal_id = db.Column(db.Integer, db.ForeignKey('proposals.id'))
     message = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+class CaseStudy(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    standard = db.Column(db.String(100), nullable=True)
+    industry = db.Column(db.String(100), nullable=False)
+    file_name = db.Column(db.String(255))
+    file_path = db.Column(db.String(255))
+    file_size = db.Column(db.Float)  # in KB
+    upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+    uploaded_by = db.Column(db.String(100))
+
 
 # -------------------- App Factory --------------------
 def create_app():
@@ -62,6 +80,27 @@ def create_app():
         return db.session.get(User, int(user_id))
 
     # -------------------- Routes --------------------
+    @app.route('/')
+    def main_home():
+        return render_template('main_home.html')
+    
+
+    @app.route('/proposal_manager')
+    @login_required
+    def proposal_manager():
+        proposals = Proposal.query.filter_by(user_id=current_user.id).order_by(Proposal.uploaded_at.desc()).all()
+        return render_template(
+            'home.html',
+            user_authenticated=current_user.is_authenticated,
+            proposals=proposals
+            )
+
+    @app.route('/research_development')
+    def research_development():
+        return render_template('research_development.html', datetime=datetime)
+
+
+
     @app.route("/")
     def home():
         proposals = Proposal.query.all()
@@ -91,6 +130,141 @@ def create_app():
         logout_user()
         flash("Logged out successfully", "info")
         return redirect(url_for('home'))
+    
+
+    #UPLOAD_FOLDER_CASESTUDY = 'uploads/casestudy'
+    #os.makedirs(UPLOAD_FOLDER_CASESTUDY, exist_ok=True)
+    #@app.route('/case_study', methods=['GET', 'POST'])
+    #@login_required
+    #def case_study():
+        #if request.method == 'POST':
+            #title = request.form['title']
+            #description = request.form['description']
+            #file = request.files['file']
+            #if file:
+                #filename = file.filename
+                #filepath = os.path.join(UPLOAD_FOLDER_CASESTUDY, filename)
+                #file.save(filepath)
+               # new_case = CaseStudy(title=title, description=description, filename=filename)
+                #db.session.add(new_case)
+                #db.session.commit()
+                #flash('Case study uploaded successfully!', 'success')
+                #return redirect(url_for('case_study'))
+        #case_studies = CaseStudy.query.order_by(CaseStudy.uploaded_at.desc()).all()
+        #return render_template('case_study.html', case_studies=case_studies)
+    
+    @app.route('/case_upload', methods=['GET', 'POST'])
+    @login_required
+    def case_upload():
+        if request.method == 'POST':
+            title = request.form.get('title')
+            description = request.form.get('description')
+            standard = request.form.get('standard') or 'all'   # ✅ Default if missing
+            industry = request.form.get('industry') or 'all'   # ✅ Default if missing
+            file = request.files.get('file')
+            
+            if file:
+                filename = secure_filename(file.filename)
+                upload_folder = os.path.join(app.root_path, 'static/uploads/casestudies')
+                os.makedirs(upload_folder, exist_ok=True)
+                filepath = os.path.join(upload_folder, filename)
+                file.save(filepath)
+                
+                file_size = round(os.path.getsize(filepath) / 1024, 2)  # KB
+                
+                new_case = CaseStudy(
+                    title=title,
+                    description=description,
+                    standard=standard,   # ✅ Added missing field
+                    industry=industry,
+                    file_name=filename,
+                    file_path=filepath,
+                    file_size=file_size,
+                    uploaded_by=current_user.username
+                    )
+                db.session.add(new_case)
+                db.session.commit()
+                
+                flash('✅ Case Study uploaded successfully!', 'success')
+                return redirect(url_for('case_upload'))
+            
+        return render_template('case_upload.html')
+
+
+
+    # ---------------- Case Study Home ----------------
+    @app.route('/case_study')
+    @login_required
+    def case_study():return render_template('case_study.html')
+
+    #@app.route('/case_search')
+    #def search():
+        #results = CaseStudy.query.all()  # Load all files from DB
+        #return render_template('case_search.html', results=results, year=datetime.now().year)
+
+
+    @app.route('/case_search', methods=['GET', 'POST'])
+    @login_required
+    def case_search():
+    # Get search filters from form or query params
+       keyword = request.values.get('keyword', '').strip()
+       standard = request.values.get('standard', '').strip()
+       industry = request.values.get('industry', '').strip()
+
+       # Base query
+       results = CaseStudy.query
+
+       # Apply filters
+       if keyword:
+           results = results.filter(
+               (CaseStudy.title.ilike(f"%{keyword}%")) |
+               (CaseStudy.description.ilike(f"%{keyword}%"))
+               
+            )
+       if standard:
+        results = results.filter(CaseStudy.industry.ilike(f"%{standard}%"))  # optional field
+       if industry:
+           results = results.filter(CaseStudy.industry.ilike(f"%{industry}%"))
+
+       # Final result list
+       results = results.order_by(CaseStudy.upload_date.desc()).all()
+
+       return render_template(
+         'case_search.html',
+         results=results,
+         keyword=keyword,
+         standard=standard,
+         industry=industry,
+         year=datetime.now().year
+     )
+
+    @app.route('/case_download/<int:case_study_id>')
+    @login_required
+    def case_download(case_study_id):
+        case = CaseStudy.query.get_or_404(case_study_id)
+        if case.file_path and os.path.exists(case.file_path):
+            return send_from_directory(os.path.dirname(case.file_path), os.path.basename(case.file_path), as_attachment=True)
+        flash("File not found!", "danger")
+        return redirect(url_for('case_search'))
+
+
+    @app.route('/case_delete/<int:case_study_id>', methods=['POST'])
+    @login_required
+    def case_delete(case_study_id):
+        case = CaseStudy.query.get_or_404(case_study_id)
+
+        # If file exists, delete it
+        if case.file_path and os.path.exists(case.file_path):
+            os.remove(case.file_path)
+
+        # Always delete the database record
+        db.session.delete(case)
+        db.session.commit()
+        flash("Case study deleted successfully!", "success")
+        
+        return redirect(url_for('case_search'))
+
+
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
@@ -132,10 +306,18 @@ def create_app():
                 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
                 filename = f"{uuid.uuid4().hex}_{file.filename}"
                 file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file_size = round(os.path.getsize(file_path) / (1024 * 1024), 2)  # MB size
+
                 
                 new_proposal = Proposal(
-                    title=title, description=description, standard=standard,
-                    industry=industry, filename=filename, user_id=current_user.id
+                    title=title,
+                    description=description,
+                    standard=standard,
+                    industry=industry,
+                    filename=filename,
+                    file_size=file_size,
+                    user_id=current_user.id
                     
                     )
                 db.session.add(new_proposal)
@@ -145,34 +327,53 @@ def create_app():
         return render_template("upload.html")
 
 
-    @app.route("/search")
-    def search():
-        keyword = request.args.get("keyword", "").strip()
-        description = request.args.get("description", "").strip()
-        standard = request.args.get("standard", "").strip()
-        industry = request.args.get("industry", "").strip()
+    #@app.route("/search")
+    #def search():
+        #keyword = request.args.get("keyword", "").strip()
+        #description = request.args.get("description", "").strip()
+        #standard = request.args.get("standard", "").strip()
+        #industry = request.args.get("industry", "").strip()
 
         
-        query = Proposal.query
+        #query = Proposal.query
 
-        if keyword:
-            query = query.filter(Proposal.title.ilike(f"%{keyword}%"))
-        if description:
-            query = query.filter(Proposal.description.ilike(f"%{description}%"))
+        #if keyword:
+            #query = query.filter(Proposal.title.ilike(f"%{keyword}%"))
+        #if description:
+            #query = query.filter(Proposal.description.ilike(f"%{description}%"))
         #if standard:
           #query = query.filter(Proposal.standard.ilike(f"%{standard}%"))
         #if industry:
             #query = query.filter(Proposal.industry.ilike(f"%{industry}%"))
              # Only filter if not 'all' or empty
-        if standard and standard.lower() not in ['all', 'all standards']:
-            query = query.filter(Proposal.standard == standard)
-        if industry and industry.lower() not in ['all', 'all industries']:
-            query = query.filter(Proposal.industry == industry)
+        #if standard and standard.lower() not in ['all', 'all standards']:
+            #query = query.filter(Proposal.standard == standard)
+        #if industry and industry.lower() not in ['all', 'all industries']:
+            #query = query.filter(Proposal.industry == industry)
 
                         
-        results = query.all()
+        #results = query.all()
         
-        return render_template("search_results.html", results=results, year=datetime.now().year)
+        #return render_template("search_results.html", results=results, year=datetime.now().year)
+    
+
+    @app.route('/search', methods=['GET', 'POST'])
+    def search():
+        keyword = request.args.get('keyword', '').lower()
+        standard = request.args.get('standard', '').lower()
+        industry = request.args.get('industry', '').lower()
+        
+        query = Proposal.query
+        
+        if keyword:
+            query = query.filter(Proposal.title.ilike(f'%{keyword}%') | Proposal.description.ilike(f'%{keyword}%'))
+        if standard:
+            query = query.filter(Proposal.standard.ilike(f'%{standard}%'))
+        if industry:
+            query = query.filter(Proposal.industry.ilike(f'%{industry}%'))
+
+        results = query.all()
+        return render_template('search_results.html', results=results, year=datetime.now().year)
 
 
     @app.route("/download/<int:proposal_id>")

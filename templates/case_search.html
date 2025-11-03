@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Case Study Manager – Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      font-family: "Segoe UI", sans-serif;
+      color: #212529;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .navbar {
+      background: linear-gradient(90deg, #0d47a1, #1565c0);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+    .navbar-brand {
+      color: #fff !important;
+      font-weight: 700;
+    }
+    .search-bar {
+      background: #ffffffcc;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(6px);
+    }
+    .form-control, .form-select {
+      border-radius: 10px;
+      border: 1px solid #90caf9;
+      transition: all 0.3s ease-in-out;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #42a5f5;
+      box-shadow: 0 0 6px #42a5f5;
+    }
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    .file-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 18px;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      border: 2px solid transparent;
+    }
+    .file-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 18px rgba(33, 150, 243, 0.25);
+      border-color: #90caf9;
+      background: #f9fcff;
+    }
+    .file-icon {
+      font-size: 3rem;
+      color: #42a5f5;
+    }
+    .file-title {
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 1.05rem;
+      color: #1e3a8a;
+    }
+    .file-meta {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    footer {
+      background: linear-gradient(90deg, #0d47a1, #1565c0);
+      color: #fff;
+      padding: 10px;
+      margin-top: auto;
+      border-top: 3px solid #42a5f5;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg px-3">
+    <a class="navbar-brand" href="{{ url_for('home') }}">
+      <i class="bi bi-folder2-open"></i> Case Study Manager
+    </a>
+  </nav>
+
+  <main class="container my-4">
+    <!-- Search & Filter -->
+    <div class="search-bar shadow-sm">
+      <form class="row g-3 align-items-center">
+        <div class="col-md-3">
+          <select id="standardFilter" class="form-select">
+            <option value="">All Standards</option>
+            <option value="npi">NPI/NPD</option>
+            <option value="vave">VAVE</option>
+            <option value="compliance">Compliance</option>
+            <option value="reengineering">Re-engineering</option>
+            <option value="obsolescence">Obsolescence</option>
+            <option value="ieee 1547">IEEE 1547</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select id="industryFilter" class="form-select">
+            <option value="">All Industries</option>
+            <option value="automotive">Automotive</option>
+            <option value="mechanical">Mechanical</option>
+            <option value="powerelectronics">Power Electronics</option>
+            <option value="electrical">Electrical</option>
+            <option value="semiconductor">Semiconductor</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <input id="searchInput" type="text" class="form-control" placeholder="🔍 Search by title or description">
+        </div>
+        <div class="col-md-3 text-end">
+          <button type="button" id="gridView" class="btn btn-light btn-sm active"><i class="bi bi-grid"></i></button>
+          <button type="button" id="listView" class="btn btn-light btn-sm"><i class="bi bi-list"></i></button>
+        </div>
+      </form>
+    </div>
+
+    {% if results %}
+      <h5 class="mt-4 mb-3 text-secondary">📂 Found {{ results|length }} file(s)</h5>
+
+      <!-- Grid View -->
+      <div id="gridContainer" class="file-grid fade-in">
+        {% for file in results %}
+          <div class="file-card"
+               data-title="{{ file.title|lower }}"
+               data-description="{{ file.description|lower }}"
+               data-standard="{{ file.standard|lower }}"
+               data-industry="{{ file.industry|lower }}">
+            <div class="file-icon"><i class="bi bi-file-earmark-text"></i></div>
+            <div class="file-title">{{ file.title }}</div>
+            <div class="file-meta">
+              {{ file.standard or 'no standard' }} • {{ file.industry or 'Unknown' }}<br>
+              {{ file.upload_date.strftime('%Y-%m-%d') }} • {{ file.file_size or '0' }} MB
+            </div>
+            <div class="mt-2">
+              <a href="{{ url_for('case_download', case_study_id=file.id) }}" class="btn btn-success btn-sm">
+                <i class="bi bi-download"></i> Download
+              </a>
+              <form method="post" action="{{ url_for('case_delete', case_study_id=file.id) }}" class="d-inline"
+                    onsubmit="return confirm('Delete this file?');">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- List View -->
+      <div id="listContainer" class="file-list fade-in" style="display:none;">
+        <table class="table file-list-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Standard</th>
+              <th>Industry</th>
+              <th>Date</th>
+              <th>Size (MB)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for case_study in results %}
+              <tr data-title="{{ case_study.title|lower }}" 
+                  data-description="{{ case_study.description|lower }}"
+                  data-standard="{{ case_study.standard|lower }}"
+                  data-industry="{{ case_study.industry|lower }}">
+                <td>{{ case_study.title }}</td>
+                <td>{{ case_study.standard or '-' }}</td>
+                <td>{{ case_study.industry or '-' }}</td>
+                <td>{{ case_study.upload_date.strftime("%Y-%m-%d") }}</td>
+                <td>{{ case_study.file_size or '0' }}</td>
+                <td>
+                  <a href="{{ url_for('case_download', case_study_id=case_study.id) }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-download"></i>
+                  </a>
+                  <form method="post" action="{{ url_for('case_delete', case_study_id=case_study.id) }}" class="d-inline"
+                        onsubmit="return confirm('Delete this file?');">
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-center mt-4 text-muted">No files match your search.</p>
+    {% endif %}
+  </main>
+
+  <footer class="text-center">
+    <small>&copy; {{ year }} Case Study Manager — File Explorer</small>
+  </footer>
+
+  <script>
+    // 🌐 View Toggle
+    const gridBtn = document.getElementById("gridView");
+    const listBtn = document.getElementById("listView");
+    const gridContainer = document.getElementById("gridContainer");
+    const listContainer = document.getElementById("listContainer");
+
+    gridBtn.addEventListener("click", () => {
+      gridContainer.style.display = "grid";
+      listContainer.style.display = "none";
+      gridBtn.classList.add("active");
+      listBtn.classList.remove("active");
+      updateFileCount();
+    });
+
+    listBtn.addEventListener("click", () => {
+      listContainer.style.display = "block";
+      gridContainer.style.display = "none";
+      listBtn.classList.add("active");
+      gridBtn.classList.remove("active");
+      updateFileCount();
+    });
+
+    // 🔍 Filters + Search
+    const searchInput = document.getElementById("searchInput");
+    const standardFilter = document.getElementById("standardFilter");
+    const industryFilter = document.getElementById("industryFilter");
+
+    function updateFileCount() {
+      const visibleCards = Array.from(document.querySelectorAll(".file-card")).filter(c => c.style.display !== "none");
+      const visibleRows = Array.from(document.querySelectorAll("#listContainer tbody tr")).filter(r => r.style.display !== "none");
+      const visibleCount = gridContainer.style.display !== "none" ? visibleCards.length : visibleRows.length;
+
+      const countHeader = document.querySelector("h5.mt-4.mb-3.text-secondary");
+      if (countHeader) countHeader.textContent = `📂 Found ${visibleCount} file(s)`;
+
+      const noResultMsg = document.querySelector(".no-results-message");
+      if (visibleCount === 0 && !noResultMsg) {
+        const msg = document.createElement("p");
+        msg.className = "text-center mt-4 text-muted no-results-message";
+        msg.textContent = "No files match your search.";
+        document.querySelector("main").appendChild(msg);
+      } else if (visibleCount > 0 && noResultMsg) {
+        noResultMsg.remove();
+      }
+    }
+
+    function filterFiles() {
+      const keyword = searchInput.value.toLowerCase();
+      const standard = standardFilter.value.toLowerCase();
+      const industry = industryFilter.value.toLowerCase();
+
+      document.querySelectorAll("[data-title]").forEach(item => {
+        const title = item.dataset.title || "";
+        const desc = item.dataset.description || "";
+        const std = item.dataset.standard || "";
+        const ind = item.dataset.industry || "";
+        const match =
+          (title.includes(keyword) || desc.includes(keyword)) &&
+          (standard === "" || std.includes(standard)) &&
+          (industry === "" || ind.includes(industry));
+        item.style.display = match ? "" : "none";
+      });
+
+      updateFileCount();
+    }
+
+    searchInput.addEventListener("input", filterFiles);
+    standardFilter.addEventListener("change", filterFiles);
+    industryFilter.addEventListener("change", filterFiles);
+  </script>
+</body>
+</html>
+

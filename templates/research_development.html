@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research & Development | Proposal Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #e9e5eb;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+      background-color: #004aad;
+    }
+
+    .navbar-brand, .nav-link {
+      color: rgb(248, 246, 246) !important;
+      font-weight: 500;
+    }
+
+    .navbar-brand:hover, .nav-link:hover {
+      color: #ffc107 !important;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-top: 50px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .card h5 {
+      color: #0f0505;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px 0;
+      background-color: #004aad;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔹 Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <!--<li class="nav-item"><a class="nav-link" href="{{ url_for('proposal_manager') }}">Proposal Manager</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('research_development') }}">R&D</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Help</a></li>-->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🔹 Page Header -->
+  <div class="container">
+    <h2 class="section-title">🔬 Research & Development</h2>
+    <p class="text-center text-muted mb-5">Explore innovation, emerging technologies, and prototype studies.</p>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>🧠 AI & ML Prototyping</h5>
+          <p>Develop and validate AI-driven control systems, pattern recognition, and prediction algorithms.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>⚙️ Advanced Motor Control</h5>
+          <p>Design next-gen motor control systems for electric vehicles and industrial drives.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>🔋 Power Electronics Innovation</h5>
+          <p>Explore high-efficiency inverters, active rectifiers, and energy storage integration.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>🌐 IoT and Connectivity</h5>
+          <p>Prototype wireless monitoring, data analytics, and digital twin applications.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>🧩 Embedded Systems</h5>
+          <p>Develop firmware and embedded logic for automotive and industrial ECUs.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h5>🌱 Sustainable Design</h5>
+          <p>Innovate eco-friendly designs and explore renewable energy technologies.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Footer -->
+  <footer>
+    <p>&copy; {{ datetime.now().year }} Proposal Manager | R&D Portal</p>
+  </footer>
+
+</body>
+</html>

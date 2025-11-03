@@ -2,83 +2,170 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Search Proposals</title>
+  <title>File Manager – Proposal Search</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
     body {
-      background: #c2c5c7;
-      color: #12161b;
-    }
-    .navbar {
-      background: rgba(2, 1, 1, 0.5);
-    }
-    .card {
-      background: rgba(15, 5, 5, 0.06);
-      border: none;
-    }
-    .card:hover {
-      background: rgb(238, 230, 230);
+      background: #e8eaed;
+      font-family: "Segoe UI", sans-serif;
+      color: #1f1f1f;
     }
 
-    /* Dropdown hover feel */
-    select {
-      transition: all 0.2s ease-in-out;
+    .navbar {
+      background-color: #1a1a1a;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-brand {
+      color: #f8f9fa !important;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .search-bar {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .file-list {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .file-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      transition: all 0.25s ease-in-out;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       cursor: pointer;
     }
 
-    select:hover {
-      background-color: #fff8e1;
-      border-color: #f0ad4e;
-    }
-    
-
-    /* Prevent page jump on hover expansion */
-    .select-wrapper {
-      position: relative;
-      display: inline-block;
-      width: 100%;
+    .file-card:hover {
+      transform: scale(1.03);
+      background: #f9fafc;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
-    /* Expanded dropdown floats above */
-    .select-wrapper select.expanded {
-      position: absolute;
-      z-index: 10;
-      background-color: #fff;
-      border: 1px solid #f0ad4e;
+    .file-icon {
+      font-size: 2.8rem;
+      color: #f0ad4e;
+    }
+
+    .file-title {
+      font-weight: 600;
+      margin-top: 8px;
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .file-meta {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+
+    .file-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+
+    .view-toggle {
+      text-align: right;
+    }
+
+    .view-toggle button {
+      border: none;
+      background: transparent;
+      color: #555;
+      font-size: 1.3rem;
+      margin-left: 8px;
+      transition: color 0.2s ease-in-out;
+    }
+
+    .view-toggle button.active {
+      color: #f0ad4e;
+    }
+
+    footer {
+      background: #1a1a1a;
+      color: #ccc;
+      padding: 10px;
+      margin-top: 40px;
+    }
+
+    table.file-list-table {
       width: 100%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.25s ease;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table.file-list-table th, table.file-list-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table.file-list-table th {
+      background: #f8f9fa;
+      color: #555;
+      font-weight: 600;
+    }
+
+    table.file-list-table tr:hover {
+      background: #f3f6fa;
+      transition: 0.3s;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark px-3">
-    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">Proposal Manager</a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg px-3">
+    <a class="navbar-brand" href="{{ url_for('home') }}">
+      <i class="bi bi-folder2-open"></i> Proposal Manager
+    </a>
     <div class="ms-auto">
-      <a class="btn btn-outline-light me-2" href="{{ url_for('upload') }}">Upload</a>
-      <a class="btn btn-warning" href="{{ url_for('search') }}">Search</a>
+      <a href="{{ url_for('upload') }}" class="btn btn-outline-light me-2"><i class="bi bi-upload"></i> Upload</a>
+      <a href="{{ url_for('search') }}" class="btn btn-warning"><i class="bi bi-search"></i> Search</a>
     </div>
   </nav>
 
   <main class="container my-4">
-    <h3 class="mb-3">Search Proposals</h3>
-
-    <!-- Search Form -->
-    <form method="get" action="{{ url_for('search') }}" class="row g-3 mb-4" autocomplete="off">
-      <div class="col-md-3">
-        <input type="text" name="keyword" class="form-control" placeholder="Search by title keyword" autocomplete="off">
-      </div>
-      <div class="col-md-3">
-        <input type="text" name="description" class="form-control" placeholder="Description keyword" autocomplete="off">
-      </div>
-
-      <!-- Standard Dropdown -->
-      <div class="col-md-2">
-        <div class="select-wrapper">
-          <select name="standard" class="form-select auto-dropdown" autocomplete="off">
+    <div class="search-bar">
+      <form id="searchForm" class="row g-3 align-items-center" autocomplete="off">
+        <div class="col-md-3">
+          <select id="standardFilter" name="standard" class="form-select">
             <option value="">All Standards</option>
             <option value="npi">NPI/NPD</option>
             <option value="vave">VAVE</option>
@@ -88,102 +175,191 @@
             <option value="IEEE 1547">IEEE 1547</option>
           </select>
         </div>
-      </div>
 
-      <!-- Industry Dropdown -->
-      <div class="col-md-2">
-        <div class="select-wrapper">
-          <select name="industry" class="form-select auto-dropdown" autocomplete="off">
+        <div class="col-md-3">
+          <select id="industryFilter" name="industry" class="form-select">
             <option value="">All Industries</option>
             <option value="automotive">Automotive</option>
             <option value="mechanical">Mechanical</option>
-            <option value="powerelectronics">PowerElectronics</option>
+            <option value="powerelectronics">Power Electronics</option>
             <option value="electrical">Electrical</option>
             <option value="semiconductor">Semiconductor</option>
           </select>
         </div>
-      </div>
 
-      <div class="col-md-2 d-grid">
-        <button type="submit" class="btn btn-warning">Search</button>
-      </div>
-    </form>
-
-    {% if results is defined and results %}
-      <h5 class="mb-3">Found {{ results|length }} result(s)</h5>
-      {% for proposal in results %}
-        <div class="card p-3 mb-3">
-          <h5 class="mb-1">{{ proposal.title }}</h5>
-          <div class="small text-secondary mb-2">{{ proposal.standard }} • {{ proposal.industry }}</div>
-          <p class="mb-2">{{ proposal.description or "No description available." }}</p>
-          <div class="small text-secondary mb-3">
-            Uploaded: {{ proposal.uploaded_at.strftime("%Y-%m-%d %H:%M:%S") }}
-          </div>
-          <div>
-            <a href="{{ url_for('download', proposal_id=proposal.id) }}" class="btn btn-success btn-sm">Download</a>
-            <form action="{{ url_for('delete', proposal_id=proposal.id) }}" method="post" class="d-inline"
-                  onsubmit="return confirm('Are you sure you want to delete this proposal?');">
-              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-          </div>
+        <div class="col-md-3">
+          <input id="searchInput" type="text" name="keyword" class="form-control"
+                 placeholder="🔍 Search by title or description">
         </div>
-      {% endfor %}
-    {% elif results is defined %}
-      <p class="text-secondary">No proposals found. Try adjusting your search.</p>
+
+        <div class="col-md-3 view-toggle">
+          <button type="button" id="gridView" class="active" title="Grid View"><i class="bi bi-grid"></i></button>
+          <button type="button" id="listView" title="List View"><i class="bi bi-list"></i></button>
+        </div>
+      </form>
+    </div>
+
+    {% if results is defined %}
+      {% if results %}
+        <h5 class="mt-4 mb-3 text-secondary" id="resultCount">📂 Found {{ results|length }} file(s)</h5>
+        <p id="noResultsMsg" class="text-center text-muted" style="display:none;">No files match your search.</p>
+
+        <!-- Grid View -->
+        <div id="gridContainer" class="file-grid fade-in">
+          {% for proposal in results %}
+            <div class="file-card" 
+                 data-title="{{ proposal.title | lower }}" 
+                 data-description="{{ proposal.description | lower }}"
+                 data-standard="{{ proposal.standard | lower }}"
+                 data-industry="{{ proposal.industry | lower }}">
+              <div class="file-icon"><i class="bi bi-file-earmark-text"></i></div>
+              <div class="file-title">{{ proposal.title }}</div>
+              <div class="file-meta">
+                {{ proposal.standard or 'No Standard' }} • {{ proposal.industry or 'Unknown' }}<br>
+                {{ proposal.uploaded_at.strftime("%Y-%m-%d") }} • {{ proposal.file_size or '0' }} MB
+              </div>
+              <div class="file-actions">
+                <a href="{{ url_for('download', proposal_id=proposal.id) }}" class="btn btn-success btn-sm btn-icon">
+                  <i class="bi bi-download"></i> Download
+                </a>
+                <form method="post" action="{{ url_for('delete', proposal_id=proposal.id) }}" class="d-inline"
+                      onsubmit="return confirm('Are you sure you want to delete this file?');">
+                  <button type="submit" class="btn btn-danger btn-sm btn-icon">
+                    <i class="bi bi-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- List View -->
+        <div id="listContainer" class="file-list fade-in">
+          <table class="table file-list-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Standard</th>
+                <th>Industry</th>
+                <th>Date</th>
+                <th>Size (MB)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for proposal in results %}
+                <tr data-title="{{ proposal.title | lower }}" 
+                    data-description="{{ proposal.description | lower }}"
+                    data-standard="{{ proposal.standard | lower }}"
+                    data-industry="{{ proposal.industry | lower }}">
+                  <td>{{ proposal.title }}</td>
+                  <td>{{ proposal.standard or '-' }}</td>
+                  <td>{{ proposal.industry or '-' }}</td>
+                  <td>{{ proposal.uploaded_at.strftime("%Y-%m-%d") }}</td>
+                  <td>{{ proposal.file_size or '0' }}</td>
+                  <td>
+                    <a href="{{ url_for('download', proposal_id=proposal.id) }}" class="btn btn-success btn-sm">
+                      <i class="bi bi-download"></i>
+                    </a>
+                    <form method="post" action="{{ url_for('delete', proposal_id=proposal.id) }}" class="d-inline"
+                          onsubmit="return confirm('Delete this file?');">
+                      <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-center mt-4 text-muted">No files match your search.</p>
+      {% endif %}
     {% else %}
-      <p class="text-secondary">Use the form above to search proposals.</p>
+      <p class="text-center mt-4 text-muted">Start typing above to search through proposals.</p>
     {% endif %}
   </main>
 
-  <footer class="text-center py-3 border-top border-secondary">
-    <small>&copy; {{ year }} Proposal Manager. All rights reserved.</small>
+  <footer class="text-center">
+    <small>&copy; {{ year }} Proposal Manager — File Explorer View</small>
   </footer>
-  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Smooth hover-to-open logic -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const selects = document.querySelectorAll('.auto-dropdown');
-      selects.forEach(select => {
-        let hoverTimeout;
+    // 🌐 View Toggle
+    const gridBtn = document.getElementById("gridView");
+    const listBtn = document.getElementById("listView");
+    const gridContainer = document.getElementById("gridContainer");
+    const listContainer = document.getElementById("listContainer");
+    const countHeader = document.getElementById("resultCount");
+    const noResultsMsg = document.getElementById("noResultsMsg");
 
-        select.addEventListener('mouseenter', function () {
-          clearTimeout(hoverTimeout);
-          hoverTimeout = setTimeout(() => {
-            this.classList.add('expanded');
-            this.size = Math.min(this.options.length, 6);
-          }, 100);
-        });
-
-        select.addEventListener('mouseleave', function () {
-          clearTimeout(hoverTimeout);
-          hoverTimeout = setTimeout(() => {
-            this.classList.remove('expanded');
-            this.size = 1;
-          }, 150);
-        });
-
-        select.addEventListener('focus', function () {
-          this.classList.add('expanded');
-          this.size = Math.min(this.options.length, 6);
-        });
-
-        select.addEventListener('blur', function () {
-          this.classList.remove('expanded');
-          this.size = 1;
-        });
-
-        select.addEventListener('change', function () {
-          this.classList.remove('expanded');
-          this.size = 1;
-          this.blur();
-        });
-      });
+    gridBtn.addEventListener("click", () => {
+      gridContainer.style.display = "grid";
+      listContainer.style.display = "none";
+      gridBtn.classList.add("active");
+      listBtn.classList.remove("active");
+      updateFileCount();
     });
+
+    listBtn.addEventListener("click", () => {
+      listContainer.style.display = "block";
+      gridContainer.style.display = "none";
+      listBtn.classList.add("active");
+      gridBtn.classList.remove("active");
+      updateFileCount();
+    });
+
+    // 🔍 Filters
+    const searchInput = document.getElementById("searchInput");
+    const standardFilter = document.getElementById("standardFilter");
+    const industryFilter = document.getElementById("industryFilter");
+
+    function updateFileCount() {
+      const visibleCards = Array.from(document.querySelectorAll(".file-card")).filter(
+        card => card.style.display !== "none"
+      );
+      const visibleRows = Array.from(document.querySelectorAll("#listContainer tbody tr")).filter(
+        row => row.style.display !== "none"
+      );
+
+      const visibleCount = gridContainer.style.display !== "none"
+        ? visibleCards.length
+        : visibleRows.length;
+
+      if (countHeader) countHeader.textContent = `📂 Found ${visibleCount} file(s)`;
+      if (noResultsMsg) noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
+    }
+
+    function filterFiles() {
+      const keyword = searchInput.value.toLowerCase();
+      const standard = standardFilter.value.toLowerCase();
+      const industry = industryFilter.value.toLowerCase();
+
+      const items = document.querySelectorAll("[data-title]");
+      items.forEach(item => {
+        const title = item.dataset.title || "";
+        const description = item.dataset.description || "";
+        const std = item.dataset.standard || "";
+        const ind = item.dataset.industry || "";
+
+        const match =
+          (title.includes(keyword) || description.includes(keyword)) &&
+          (standard === "" || std.includes(standard)) &&
+          (industry === "" || ind.includes(industry));
+
+        item.style.display = match ? "" : "none";
+      });
+
+      updateFileCount();
+    }
+
+    searchInput.addEventListener("input", filterFiles);
+    standardFilter.addEventListener("change", filterFiles);
+    industryFilter.addEventListener("change", filterFiles);
   </script>
 </body>
 </html>
+
+
 
 
 
