@@ -2,25 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🔬 Research & Development | TechM Innovation Portal</title>
+  <title>🧩 New Product Development | TechM Innovation Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(135deg, #e0f7fa, #e3f2fd, #f3e5f5);
+      background: linear-gradient(135deg, #fce4ec, #e3f2fd, #e8f5e9);
       font-family: 'Poppins', sans-serif;
       color: #333;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
+
     .navbar {
-      background: linear-gradient(90deg, #0d6efd, #6610f2);
+      background: linear-gradient(90deg, #0d6efd, #d63384);
     }
     .navbar-brand, .nav-link {
       color: #fff !important;
       font-weight: 500;
     }
+
     .hero {
       text-align: center;
       padding: 80px 20px;
@@ -34,21 +36,26 @@
       color: #555;
       font-size: 1.2rem;
     }
+
     .card {
       border: none;
       border-radius: 20px;
       padding: 30px;
       transition: all 0.3s ease;
       color: #fff;
+      min-height: 200px;
     }
     .card:hover {
       transform: translateY(-10px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
-    .bg-blue { background: linear-gradient(135deg, #2196f3, #42a5f5); }
-    .bg-green { background: linear-gradient(135deg, #43a047, #66bb6a); }
+
+    .bg-pink { background: linear-gradient(135deg, #ec407a, #f48fb1); }
+    .bg-blue { background: linear-gradient(135deg, #42a5f5, #64b5f6); }
+    .bg-yellow { background: linear-gradient(135deg, #fbc02d, #fff176); color: #333; }
+    .bg-green { background: linear-gradient(135deg, #66bb6a, #81c784); }
     .bg-purple { background: linear-gradient(135deg, #8e24aa, #ba68c8); }
-    .bg-orange { background: linear-gradient(135deg, #fb8c00, #ffa726); }
+
     footer {
       background-color: #f8f9fa;
       color: #666;
@@ -69,7 +76,7 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
           <!--<li class="nav-item"><a class="nav-link" href="{{ url_for('case_study') }}">Case Study</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('proposal_manager') }}">Proposal Manager</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('research_development') }}">R&D</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>-->
         </ul>
       </div>
@@ -78,39 +85,39 @@
 
   <!-- Hero Section -->
   <div class="hero">
-    <h1>Research & Development</h1>
-    <p>Innovate, explore, and drive the future of technology through groundbreaking research.</p>
+    <h1>New Product Development (NPD)</h1>
+    <p>Transforming innovative ideas into successful market-ready products.</p>
   </div>
 
-  <!-- R&D Categories -->
+  <!-- NPD Stages -->
   <div class="container py-5">
     <div class="row g-4">
 
       <div class="col-md-6 col-lg-3">
+        <div class="card text-center bg-pink">
+          <h4>💡 Concept & Ideation</h4>
+          <p>Brainstorm new ideas and assess product feasibility and potential.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
         <div class="card text-center bg-blue">
-          <h4>⚙️ Emerging Technologies</h4>
-          <p>Explore AI, IoT, Blockchain, and 5G innovations shaping tomorrow.</p>
+          <h4>🧠 Design & Development</h4>
+          <p>Create detailed product designs and develop functional prototypes.</p>
         </div>
       </div>
 
       <div class="col-md-6 col-lg-3">
         <div class="card text-center bg-green">
-          <h4>🔋 Sustainable Engineering</h4>
-          <p>Develop eco-friendly solutions and green product initiatives.</p>
+          <h4>🧪 Testing & Validation</h4>
+          <p>Test product performance, safety, and compliance with standards.</p>
         </div>
       </div>
 
       <div class="col-md-6 col-lg-3">
         <div class="card text-center bg-purple">
-          <h4>🤖 Automation & Robotics</h4>
-          <p>Build intelligent automation systems and advanced robotics.</p>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-3">
-        <div class="card text-center bg-orange">
-          <h4>🧠 Innovation Lab Projects</h4>
-          <p>Collaborate, prototype, and test new ideas in our innovation labs.</p>
+          <h4>🚀 Launch & Commercialization</h4>
+          <p>Introduce the product to the market with optimized strategies.</p>
         </div>
       </div>
 
@@ -122,9 +129,8 @@
   </div>
 
   <footer>
-    <medium>© 2025 Tech Mahindra | Research & Development Portal</medium>
+    <medium>© 2025 Tech Mahindra | New Product Development Portal</medium>
   </footer>
 
 </body>
 </html>
-

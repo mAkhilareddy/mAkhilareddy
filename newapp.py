@@ -97,6 +97,11 @@ def create_app():
     @app.route('/research_development')
     def research_development():
         return render_template('research_development.html', datetime=datetime)
+    
+
+    @app.route('/npd')
+    def npd():
+        return render_template('npd.html', datetime=datetime)
 
 
 
