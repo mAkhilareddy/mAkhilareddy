@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>💻 Firmware Deliverables | TechM Innovation Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { 
+      background: #f7f9fb; 
+      font-family: 'Poppins', sans-serif; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+    }
+
+    .content { flex: 1 0 auto; }
+
+    .navbar { background: linear-gradient(90deg, #0d6efd, #d63384); }
+    .navbar-brand { color: white !important; }
+
+    .section-title {
+      background: linear-gradient(90deg, #66bb6a, #81c784);
+      color: white; padding: 20px; border-radius: 12px; text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .deliver { 
+      background: white; padding: 25px; border-radius: 15px; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.3s; 
+    }
+    .deliver:hover { transform: translateY(-5px); }
+
+    footer { 
+      background: #020407; 
+      color: #e9dede; 
+      text-align: center; 
+      padding: 15px 0; 
+      margin-top: auto; 
+      flex-shrink: 0; 
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
+  </div>
+</nav>
+
+<div class="content flex-grow-1">
+  <div class="container py-5">
+
+    <div class="section-title">
+      <h2>💻 Firmware (FW) Deliverables</h2>
+      <p>All firmware binaries, drivers, MCAL, HAL, and embedded code artifacts.</p>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <div class="deliver">
+          <h5>🔌 Microcontroller Firmware</h5>
+          <p>Hex/bin files, project workspace, startup code, runtime behavior, memory maps.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="deliver">
+          <h5>🧩 Hardware Abstraction Layer (HAL)</h5>
+          <p>Peripheral drivers (UART, SPI, I2C, ADC, Timers) and low-level interfaces.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="deliver">
+          <h5>🧪 Bootloader</h5>
+          <p>Secure boot, OTA support, checksum validation, firmware flashing utilities.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="deliver">
+          <h5>⚙ Firmware Testing Reports</h5>
+          <p>HIL testing, unit testing, code coverage, integration test logs, validation results.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('npd') }}" class="btn btn-success btn-lg">⬅ Back to NPD</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>© 2025 Tech Mahindra | New Product Development Portal</footer>
+
+</body>
+</html>

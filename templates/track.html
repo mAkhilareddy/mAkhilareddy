@@ -11,7 +11,7 @@
                 <th>Title</th>
                 <th>Description</th>
                 <th>Standard</th>
-                <th>Industry</th>
+                <th>Vertical</th>
                 <th>Uploaded At</th>
                 <th>File</th>
             </tr>
@@ -22,7 +22,7 @@
                     <td>{{ proposal.title }}</td>
                     <td>{{ proposal.description }}</td>
                     <td>{{ proposal.standard }}</td>
-                    <td>{{ proposal.industry }}</td>
+                    <td>{{ proposal.vertical }}</td>
                     <td>{{ proposal.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td>
                         {% if proposal.filename %}

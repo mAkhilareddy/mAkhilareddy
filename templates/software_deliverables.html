@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>💻 Software Deliverables | TechM Innovation Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { 
+      background: #fafbff; 
+      font-family: 'Poppins', sans-serif; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    .content { flex: 1 0 auto; }
+
+    .navbar { background: linear-gradient(90deg, #0d6efd, #d63384); }
+    .navbar-brand { color: white !important; }
+
+    .section-title {
+      background: linear-gradient(90deg, #ec407a, #f48fb1);
+      color: white; 
+      padding: 20px; 
+      border-radius: 12px; 
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .block { 
+      background: #fff; 
+      padding: 25px; 
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+      transition: 0.3s; 
+    }
+    .block:hover { transform: translateY(-5px); }
+
+    footer { 
+      background: #020407; 
+      color: #e9dede; 
+      padding: 15px 0; 
+      text-align: center; 
+      margin-top: auto; 
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <div class="container py-5">
+
+      <div class="section-title">
+        <h2>💻 Software (SW) Deliverables</h2>
+        <p>Application software, middleware, algorithms, UI/UX, and test artifacts.</p>
+      </div>
+
+      <div class="row g-4">
+
+        <div class="col-md-6">
+          <div class="block">
+            <h5>🖥 Application Modules</h5>
+            <p>Core functional modules, libraries, frontend/backend systems.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="block">
+            <h5>🔗 Middleware</h5>
+            <p>Communication stacks, protocols, API layers, system integration modules.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="block">
+            <h5>🔍 Algorithms</h5>
+            <p>Control algorithms, predictive logic, machine learning models, optimization flows.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="block">
+            <h5>🧪 Functional Testing</h5>
+            <p>Test cases, SIT/UAT reports, traceability, bug reports, automation outputs.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('npd') }}" class="btn btn-pink btn-lg" style="background:#ec407a;color:white;">⬅ Back to NPD</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>© 2025 Tech Mahindra | New Product Development Portal</footer>
+
+</body>
+</html>

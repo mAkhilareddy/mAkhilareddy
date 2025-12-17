@@ -8,7 +8,11 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
+    /* Make body full height flex container */
     body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       background: #e8eaed;
       font-family: "Segoe UI", sans-serif;
       color: #1f1f1f;
@@ -32,6 +36,10 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
 
+    main {
+      flex: 1 0 auto; /* Take remaining space to push footer down */
+    }
+
     .file-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -48,6 +56,9 @@
       background: #fff;
       border-radius: 12px;
       padding: 15px;
+      display: flex;
+      flex-direction: column; /* align actions at bottom */
+      height: 100%;
       transition: all 0.25s ease-in-out;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       cursor: pointer;
@@ -79,7 +90,7 @@
     }
 
     .file-actions {
-      margin-top: 8px;
+      margin-top: auto; /* push buttons to bottom */
       display: flex;
       gap: 8px;
     }
@@ -112,7 +123,7 @@
       background: #1a1a1a;
       color: #ccc;
       padding: 10px;
-      margin-top: 40px;
+      margin-top: auto; /* stick footer to bottom */
     }
 
     table.file-list-table {
@@ -162,6 +173,7 @@
   </nav>
 
   <main class="container my-4">
+    <!-- Search Bar -->
     <div class="search-bar">
       <form id="searchForm" class="row g-3 align-items-center" autocomplete="off">
         <div class="col-md-3">
@@ -170,20 +182,26 @@
             <option value="npi">NPI/NPD</option>
             <option value="vave">VAVE</option>
             <option value="compliance">Compliance</option>
-            <option value="reengineering">Re-engineering</option>
+            <option value="recengineering">Re-engineering</option>
             <option value="obsolescence">Obsolescence</option>
             <option value="IEEE 1547">IEEE 1547</option>
           </select>
         </div>
 
         <div class="col-md-3">
-          <select id="industryFilter" name="industry" class="form-select">
-            <option value="">All Industries</option>
+          <select id="verticalFilter" name="vertical" class="form-select">
+            <option value="">All Verticals</option>
             <option value="automotive">Automotive</option>
+            <option value="semiconductor">Semiconductor</option>
+            <option value="consumer">Consumer</option>
+            <option value="Industrial">Industrial</option>
+            <option value="energy&utilites">Energy&utilites</option>
+            <option value="aerospace">Aerospace</option>
+            <option value="oil&gas">Oil&gas</option>
+            <option value="healthcare">Healthcare</option>
             <option value="mechanical">Mechanical</option>
             <option value="powerelectronics">Power Electronics</option>
             <option value="electrical">Electrical</option>
-            <option value="semiconductor">Semiconductor</option>
           </select>
         </div>
 
@@ -199,6 +217,7 @@
       </form>
     </div>
 
+    <!-- Results -->
     {% if results is defined %}
       {% if results %}
         <h5 class="mt-4 mb-3 text-secondary" id="resultCount">📂 Found {{ results|length }} file(s)</h5>
@@ -211,11 +230,11 @@
                  data-title="{{ proposal.title | lower }}" 
                  data-description="{{ proposal.description | lower }}"
                  data-standard="{{ proposal.standard | lower }}"
-                 data-industry="{{ proposal.industry | lower }}">
+                 data-vertical="{{ proposal.vertical | lower }}">
               <div class="file-icon"><i class="bi bi-file-earmark-text"></i></div>
               <div class="file-title">{{ proposal.title }}</div>
               <div class="file-meta">
-                {{ proposal.standard or 'No Standard' }} • {{ proposal.industry or 'Unknown' }}<br>
+                {{ proposal.standard or 'No Standard' }} • {{ proposal.vertical or 'Unknown' }}<br>
                 {{ proposal.uploaded_at.strftime("%Y-%m-%d") }} • {{ proposal.file_size or '0' }} MB
               </div>
               <div class="file-actions">
@@ -240,7 +259,7 @@
               <tr>
                 <th>Title</th>
                 <th>Standard</th>
-                <th>Industry</th>
+                <th>Vertical</th>
                 <th>Date</th>
                 <th>Size (MB)</th>
                 <th>Actions</th>
@@ -251,10 +270,10 @@
                 <tr data-title="{{ proposal.title | lower }}" 
                     data-description="{{ proposal.description | lower }}"
                     data-standard="{{ proposal.standard | lower }}"
-                    data-industry="{{ proposal.industry | lower }}">
+                    data-vertical="{{ proposal.vertical | lower }}">
                   <td>{{ proposal.title }}</td>
                   <td>{{ proposal.standard or '-' }}</td>
-                  <td>{{ proposal.industry or '-' }}</td>
+                  <td>{{ proposal.vertical or '-' }}</td>
                   <td>{{ proposal.uploaded_at.strftime("%Y-%m-%d") }}</td>
                   <td>{{ proposal.file_size or '0' }}</td>
                   <td>
@@ -284,7 +303,7 @@
   </footer>
 
   <script>
-    // 🌐 View Toggle
+    // View toggle
     const gridBtn = document.getElementById("gridView");
     const listBtn = document.getElementById("listView");
     const gridContainer = document.getElementById("gridContainer");
@@ -308,10 +327,10 @@
       updateFileCount();
     });
 
-    // 🔍 Filters
+    // Filters
     const searchInput = document.getElementById("searchInput");
     const standardFilter = document.getElementById("standardFilter");
-    const industryFilter = document.getElementById("industryFilter");
+    const verticalFilter = document.getElementById("verticalFilter");
 
     function updateFileCount() {
       const visibleCards = Array.from(document.querySelectorAll(".file-card")).filter(
@@ -332,19 +351,19 @@
     function filterFiles() {
       const keyword = searchInput.value.toLowerCase();
       const standard = standardFilter.value.toLowerCase();
-      const industry = industryFilter.value.toLowerCase();
+      const vertical = verticalFilter.value.toLowerCase();
 
       const items = document.querySelectorAll("[data-title]");
       items.forEach(item => {
         const title = item.dataset.title || "";
         const description = item.dataset.description || "";
         const std = item.dataset.standard || "";
-        const ind = item.dataset.industry || "";
+        const ver = item.dataset.vertical || "";
 
         const match =
           (title.includes(keyword) || description.includes(keyword)) &&
           (standard === "" || std.includes(standard)) &&
-          (industry === "" || ind.includes(industry));
+          (vertical === "" || ver.includes(vertical));
 
         item.style.display = match ? "" : "none";
       });
@@ -354,11 +373,10 @@
 
     searchInput.addEventListener("input", filterFiles);
     standardFilter.addEventListener("change", filterFiles);
-    industryFilter.addEventListener("change", filterFiles);
+    verticalFilter.addEventListener("change", filterFiles);
   </script>
 </body>
 </html>
-
 
 
 

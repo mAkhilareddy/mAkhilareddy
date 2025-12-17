@@ -27,24 +27,24 @@
       text-align: center;
       padding: 80px 20px;
     }
-    .hero h1 {
-      color: #0d6efd;
-      font-size: 2.8rem;
-      font-weight: 700;
-    }
-    .hero p {
-      color: #555;
-      font-size: 1.2rem;
-    }
+    .hero h1 { color: #0d6efd; font-size: 2.8rem; font-weight: 700; }
+    .hero p { color: #555; font-size: 1.2rem; }
 
     .card {
       border: none;
       border-radius: 20px;
       padding: 30px;
       transition: all 0.3s ease;
-      color: #fff;
-      min-height: 200px;
+      color: #0c0909;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
     }
+
     .card:hover {
       transform: translateY(-10px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -52,21 +52,28 @@
 
     .bg-pink { background: linear-gradient(135deg, #ec407a, #f48fb1); }
     .bg-blue { background: linear-gradient(135deg, #42a5f5, #64b5f6); }
-    .bg-yellow { background: linear-gradient(135deg, #fbc02d, #fff176); color: #333; }
     .bg-green { background: linear-gradient(135deg, #66bb6a, #81c784); }
     .bg-purple { background: linear-gradient(135deg, #8e24aa, #ba68c8); }
+    .bg-yellow { background: linear-gradient(135deg, #fbc02d, #fff176); color: #333; }
 
     footer {
-      background-color: #f8f9fa;
-      color: #666;
+      background-color: #020407;
+      color: #e9dede;
       text-align: center;
       padding: 15px 0;
       border-top: 1px solid #ddd;
       margin-top: auto;
       font-weight: 1000;
     }
+
+    @media (max-width: 575.98px) {
+      .hero h1 { font-size: 2rem; }
+      .hero p { font-size: 1rem; }
+      .card { padding: 20px; }
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Navbar -->
@@ -74,11 +81,7 @@
     <div class="container-fluid">
       <a class="navbar-brand fw-bold" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
       <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-          <!--<li class="nav-item"><a class="nav-link" href="{{ url_for('case_study') }}">Case Study</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('research_development') }}">R&D</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>-->
-        </ul>
+        <ul class="navbar-nav ms-auto"></ul>
       </div>
     </div>
   </nav>
@@ -91,35 +94,47 @@
 
   <!-- NPD Stages -->
   <div class="container py-5">
-    <div class="row g-4">
+    <div class="d-flex flex-wrap justify-content-center gap-4">
 
-      <div class="col-md-6 col-lg-3">
-        <div class="card text-center bg-pink">
-          <h4>💡 Concept & Ideation</h4>
-          <p>Brainstorm new ideas and assess product feasibility and potential.</p>
+      <!-- Hardware -->
+      <a href="{{ url_for('hardware_deliverables') }}" class="text-decoration-none w-auto">
+        <div class="card bg-blue" style="flex: 1 1 180px; max-width: 200px;">
+          <h5>🛠 Hardware (HW) Deliverables</h5>
+          <p>Designs, schematics, and physical prototypes of hardware components.</p>
         </div>
-      </div>
+      </a>
 
-      <div class="col-md-6 col-lg-3">
-        <div class="card text-center bg-blue">
-          <h4>🧠 Design & Development</h4>
-          <p>Create detailed product designs and develop functional prototypes.</p>
+      <!-- Firmware -->
+      <a href="{{ url_for('firmware_deliverables') }}" class="text-decoration-none w-auto">
+        <div class="card bg-green" style="flex: 1 1 180px; max-width: 200px;">
+          <h5>💻 Firmware (FW) Deliverables</h5>
+          <p>Embedded firmware binaries, microcontroller code, drivers, bootloaders.</p>
         </div>
-      </div>
+      </a>
 
-      <div class="col-md-6 col-lg-3">
-        <div class="card text-center bg-green">
-          <h4>🧪 Testing & Validation</h4>
-          <p>Test product performance, safety, and compliance with standards.</p>
+      <!-- Software -->
+      <a href="{{ url_for('software_deliverables') }}" class="text-decoration-none w-auto">
+        <div class="card bg-pink" style="flex: 1 1 180px; max-width: 200px;">
+          <h5>💻 Software (SW) Deliverables</h5>
+          <p>Application modules, middleware, algorithms, UI/UX, and test outputs.</p>
         </div>
-      </div>
+      </a>
 
-      <div class="col-md-6 col-lg-3">
-        <div class="card text-center bg-purple">
-          <h4>🚀 Launch & Commercialization</h4>
-          <p>Introduce the product to the market with optimized strategies.</p>
+      <!-- Mechanical -->
+      <a href="{{ url_for('mechanical_deliverables') }}" class="text-decoration-none w-auto">
+        <div class="card bg-purple" style="flex: 1 1 180px; max-width: 200px;">
+          <h5>⚙ Mechanical (MEC) Deliverables</h5>
+          <p>CAD models, assemblies, and mechanical analysis documentation.</p>
         </div>
-      </div>
+      </a>
+
+      <!-- Compliance -->
+      <a href="{{ url_for('compliance_deliverables') }}" class="text-decoration-none w-auto">
+        <div class="card bg-yellow" style="flex: 1 1 180px; max-width: 200px;">
+          <h5>✅ Certification & Compliance</h5>
+          <p>Compliance reports, certifications, and regulatory approvals.</p>
+        </div>
+      </a>
 
     </div>
 

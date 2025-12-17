@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📜 Compliance & Certification | TechM Innovation Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { 
+      background:#f8f9fc; 
+      font-family:'Poppins',sans-serif; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+    }
+
+    .content { flex: 1 0 auto; }
+
+    .navbar { background: linear-gradient(90deg, #0d6efd, #d63384); }
+    .navbar-brand, .nav-link { color:#fff !important; }
+
+    .title {
+      background: linear-gradient(90deg, #fbc02d, #fff176);
+      padding:20px; border-radius:12px; text-align:center; color:#333;
+      font-weight:600; margin-bottom:30px;
+    }
+
+    .comp-card {
+      background:white; padding:25px; border-radius:15px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      transition:0.3s;
+    }
+    .comp-card:hover { transform:translateY(-5px); }
+
+    footer { 
+      background:#020407; 
+      color:#e9dede; 
+      padding:15px; 
+      text-align:center; 
+      margin-top: auto; 
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
+  </div>
+</nav>
+
+<div class="content flex-grow-1">
+  <div class="container py-5">
+
+    <div class="title">
+      <h2>📜 Certification & Compliance</h2>
+      <p>Regulatory approvals, standards validation, and compliance documentation.</p>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <div class="comp-card">
+          <h5>🛡 Safety Certifications</h5>
+          <p>UL, CE, ISO 26262, IEC safety evaluations and compliance evidence.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="comp-card">
+          <h5>📡 EMI/EMC Reports</h5>
+          <p>Conducted/radiated emission tests, immunity results, shielding validations.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="comp-card">
+          <h5>🏷 Regulatory Approvals</h5>
+          <p>Country-specific certification: BIS, FCC, RoHS, REACH, WEEE compliance.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="comp-card">
+          <h5>📘 Documentation</h5>
+          <p>Test reports, compliance matrices, traceability, audit records.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('npd') }}" class="btn btn-warning btn-lg">⬅ Back to NPD</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>© 2025 Tech Mahindra | New Product Development Portal</footer>
+
+</body>
+</html>

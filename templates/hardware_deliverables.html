@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🔧 Hardware Deliverables | TechM Innovation Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { 
+      background: #f7f9fc; 
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;          /* full viewport height */
+      display: flex;               /* flex layout */
+      flex-direction: column;      /* vertical layout */
+    }
+
+    .content { 
+      flex: 1 0 auto;              /* fill space above footer */
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, #0d6efd, #d63384);
+    }
+    .navbar-brand, .nav-link { color: #fff !important; }
+
+    .section-title {
+      background: linear-gradient(90deg, #42a5f5, #64b5f6);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .deliverable-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .deliverable-card:hover {
+      transform: translateY(-5px);
+    }
+
+    footer {
+      background-color: #020407;
+      color: #e9dede;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: auto;   /* push footer to bottom */
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
+  </div>
+</nav>
+
+<div class="content flex-grow-1">
+  <div class="container py-5">
+
+    <div class="section-title">
+      <h2>🔧 Hardware (HW) Deliverables</h2>
+      <p>All hardware design, prototype, and validation artifacts.</p>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <a href="{{ url_for('schematics_home') }}" style="text-decoration:none;color:inherit;">
+          <div class="deliverable-card">
+            <h5>📐 Schematics & Circuit Design</h5>
+            <p>Schematic diagrams, PCB circuit logic, connectivity maps, and electrical design justification.</p>
+          </div>
+        </a>
+      </div>
+
+
+      <div class="col-md-6">
+        <div class="deliverable-card">
+          <h5>📘 PCB Layout Files</h5>
+          <p>Gerber files, board stack-up, routing constraints, manufacturing outputs, and DFM checks.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="deliverable-card">
+          <h5>🧪 Hardware Prototype</h5>
+          <p>Prototype boards, wiring diagrams, PCBA samples, and physical hardware evaluations.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="deliverable-card">
+          <h5>🧲 BOM (Bill of Materials)</h5>
+          <p>Component list, vendor details, alternates, costs, lifecycle status, and supply chain notes.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('npd') }}" class="btn btn-primary btn-lg">⬅ Back to NPD</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>© 2025 Tech Mahindra | New Product Development Portal</footer>
+
+</body>
+</html>

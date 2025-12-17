@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search Schematics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    html { font-size: 17.5px; } /* 🔠 Bigger base font */
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: linear-gradient(135deg, #e9eef5, #f6f8fb);
+    }
+
+    /* PAGE */
+    .page {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      height: 70px;
+      background: linear-gradient(90deg, #ffffff, #eef2ff);
+      border-bottom: 2px solid #dee2e6;
+      display: flex;
+      align-items: center;
+      padding: 0 36px;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #0b5ed7;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      padding: 28px 36px;
+      display: flex;
+    }
+
+    .content-panel {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.1);
+      border: 1px solid #e3e8f0;
+    }
+
+    /* HEADINGS */
+    h5 {
+      font-size: 1.5rem;
+    }
+
+    /* SEARCH CARD */
+    .search-card {
+      background: linear-gradient(90deg, #f5f9ff, #f3f0ff);
+      border-radius: 12px;
+      padding: 26px;
+      border: 1px solid #e3e8f0;
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .form-control,
+    .form-select {
+      font-size: 1.1rem;
+      padding: 0.65rem 0.8rem;
+    }
+
+    /* RESULTS */
+    .results-wrapper {
+      flex: 1;                 /* 🔑 pushes content to bottom */
+      overflow-y: auto;
+      margin-top: 12px;
+    }
+
+    .list-group-item {
+      font-size: 1.15rem;
+      padding: 14px 18px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      font-size: 1.1rem;
+      padding: 0.6rem 1.6rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #1976d2, #7b1fa2);
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    🔍 Search Schematics
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="content-panel">
+
+      <h5 class="mb-4 text-primary fw-bold">Advanced Schematic Search</h5>
+
+      <!-- SEARCH FORM -->
+      <form action="/search_schematics" method="POST" class="search-card">
+
+        <div class="row g-4">
+
+          <!-- TITLE / DESCRIPTION -->
+          <div class="col-md-6">
+            <label class="form-label">Title / Description</label>
+            <input type="text" name="query_text" class="form-control"
+                   placeholder="Search title or description">
+          </div>
+
+          <!-- INPUT VOLTAGE -->
+          <div class="col-md-3">
+            <label class="form-label">Input Voltage</label>
+            <select name="input_voltage" class="form-select">
+              <option value="">Any</option>
+              <option>3.3 V</option>
+              <option>5 V</option>
+              <option>9 V</option>
+              <option>12 V</option>
+              <option>24 V</option>
+              <option>48 V</option>
+              <option>110 V</option>
+              <option>220 V</option>
+              <option>400 V</option>
+            </select>
+          </div>
+
+          <!-- OUTPUT CURRENT -->
+          <div class="col-md-3">
+            <label class="form-label">Output Current (A)</label>
+            <input type="number" step="0.1" name="output_current"
+                   class="form-control"
+                   placeholder="e.g. 5">
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="d-flex justify-content-end mt-4 gap-3">
+          <a href="{{ url_for('schematics_home') }}" class="btn btn-outline-secondary">
+            Back
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-search me-2"></i> Search
+          </button>
+        </div>
+
+      </form>
+
+      <!-- RESULTS -->
+      <div class="results-wrapper">
+
+        {% if results %}
+          <h6 class="fw-semibold mb-3">Search Results</h6>
+
+          <ul class="list-group">
+            {% for r in results %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ r.title }}</strong><br>
+                  <small class="text-muted">{{ r.description }}</small>
+                </div>
+                <div>
+                  <span class="badge bg-primary">{{ r.input_voltage }}</span>
+                  <span class="badge bg-secondary">{{ r.output_current }} A</span>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+
+        {% else %}
+          <div class="text-muted mt-4">
+            No results found. Adjust search criteria.
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
+

@@ -93,9 +93,9 @@
     </div>
 
     <div class="col-md-6">
-      <h5 class="section-title">🏭 Proposals by Industry</h5>
+      <h5 class="section-title">🏭 Proposals by vertical</h5>
       <ul>
-        {% for ind, count in by_industry %}
+        {% for ind, count in by_vertical %}
           <li><strong>{{ ind or 'Unspecified' }}</strong> — {{ count }}</li>
         {% endfor %}
       </ul>

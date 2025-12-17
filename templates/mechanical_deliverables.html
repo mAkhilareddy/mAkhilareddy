@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⚙ Mechanical Deliverables | TechM Innovation Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { 
+      background: #f8fafa; 
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content { 
+      flex: 1 0 auto;
+    }
+
+    .navbar { background: linear-gradient(90deg, #0d6efd, #d63384); }
+    .navbar-brand, .nav-link { color: #fff !important; }
+
+    .section-title {
+      background: linear-gradient(90deg, #8e24aa, #ba68c8);
+      color: white; text-align:center; padding:20px; border-radius:12px;
+      margin-bottom:25px;
+    }
+
+    .box { 
+      background:white; padding:25px; border-radius:15px; 
+      box-shadow:0 5px 15px rgba(0,0,0,0.1); 
+      transition:0.3s;
+    }
+    .box:hover { transform:translateY(-5px); }
+
+    footer { 
+      background:#020407; 
+      color:#e9dede; 
+      padding:15px; 
+      text-align:center; 
+      margin-top: auto; 
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="{{ url_for('main_home') }}">TechM Innovation Portal</a>
+  </div>
+</nav>
+
+<div class="content flex-grow-1">
+  <div class="container py-5">
+
+    <div class="section-title">
+      <h2>⚙ Mechanical (Mech) Deliverables</h2>
+      <p>Mechanical designs, models, structural analysis, and assembly documentation.</p>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <div class="box">
+          <h5>📐 CAD Models</h5>
+          <p>2D/3D CAD designs, modeling files, assembly drafts, constraint diagrams.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="box">
+          <h5>🧩 Mechanical Assemblies</h5>
+          <p>Exploded views, assembly instructions, tolerances, fastener details.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="box">
+          <h5>🧪 FEA Simulations</h5>
+          <p>Stress analysis, thermal simulation, vibration analysis, durability study.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="box">
+          <h5>📘 Material Specifications</h5>
+          <p>Material datasheets, mechanical properties, compliance information.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('npd') }}" class="btn btn-purple btn-lg" style="background:#8e24aa;color:white;">⬅ Back to NPD</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>© 2025 Tech Mahindra | New Product Development Portal</footer>
+
+</body>
+</html>

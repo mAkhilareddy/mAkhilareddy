@@ -55,7 +55,7 @@
             <tr>
                 <th>ID</th>
                 <th>Client Name</th>
-                <th>Industry</th>
+                <th>vertical</th>
                 <th>Projects</th>
                 <th>Status</th>
             </tr>
@@ -65,7 +65,7 @@
             <tr>
                 <td>{{ client.id }}</td>
                 <td>{{ client.name }}</td>
-                <td>{{ client.industry }}</td>
+                <td>{{ client.vertical }}</td>
                 <td>{{ client.projects }}</td>
                 <td class="{{ 'active' if client.status == 'Active' else 'inactive' }}">{{ client.status }}</td>
             </tr>

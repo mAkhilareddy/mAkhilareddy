@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schematics | TechM Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body { background: #eef3f8; font-family: 'Poppins', sans-serif; }
+    .card-btn {
+      padding: 30px;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: .3s;
+      text-align: center;
+    }
+    .card-btn:hover { transform: translateY(-5px); }
+  </style>
+</head>
+
+<body>
+<div class="container py-5">
+
+  <h2 class="text-center mb-4">📐 Schematics & Circuit Design</h2>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <a href="{{ url_for('upload_schematics') }}" style="text-decoration:none;color:inherit;">
+        <div class="card-btn">
+          <h4>⬆ Upload Schematics</h4>
+          <p>Upload schematic PDFs, images, source files.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-6">
+      <a href="{{ url_for('search_schematics') }}" style="text-decoration:none;color:inherit;">
+        <div class="card-btn">
+          <h4>🔍 Search Schematics</h4>
+          <p>Search previously uploaded schematic files.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('hardware_deliverables') }}" class="btn btn-secondary btn-lg">⬅ Back</a>
+  </div>
+
+</div>
+</body>
+</html>

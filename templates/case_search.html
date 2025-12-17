@@ -8,84 +8,150 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
+    /* Make body full height flex container */
     body {
-      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
-      font-family: "Segoe UI", sans-serif;
-      color: #212529;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
+      background: #e8eaed;
+      font-family: "Segoe UI", sans-serif;
+      color: #1f1f1f;
     }
+
+    /* Navbar styling */
     .navbar {
-      background: linear-gradient(90deg, #0d47a1, #1565c0);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      background-color: #1a1a1a;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     }
     .navbar-brand {
-      color: #fff !important;
-      font-weight: 700;
+      color: #f8f9fa !important;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
+
+    /* Main content should take remaining space */
+    main {
+      flex: 1 0 auto;
+    }
+
     .search-bar {
-      background: #ffffffcc;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(6px);
-    }
-    .form-control, .form-select {
+      background: #fff;
       border-radius: 10px;
-      border: 1px solid #90caf9;
-      transition: all 0.3s ease-in-out;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
-    .form-control:focus, .form-select:focus {
-      border-color: #42a5f5;
-      box-shadow: 0 0 6px #42a5f5;
-    }
+
+    /* Grid and list styling */
     .file-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.2rem;
+      grid-auto-rows: 1fr; /* equal row heights */
+      gap: 1rem;
       margin-top: 1rem;
     }
+    .file-list {
+      display: none;
+      margin-top: 1rem;
+    }
+
     .file-card {
       background: #fff;
-      border-radius: 15px;
-      padding: 18px;
-      transition: all 0.3s ease-in-out;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* fill grid row */
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: all 0.25s ease-in-out;
     }
     .file-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 18px rgba(33, 150, 243, 0.25);
-      border-color: #90caf9;
-      background: #f9fcff;
+      transform: scale(1.03);
+      background: #f9fafc;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
+
     .file-icon {
-      font-size: 3rem;
-      color: #42a5f5;
+      font-size: 2.8rem;
+      color: #1f10a7;
     }
     .file-title {
       font-weight: 600;
-      margin-top: 10px;
-      font-size: 1.05rem;
-      color: #1e3a8a;
+      margin-top: 8px;
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
     .file-meta {
-      font-size: 0.9rem;
-      color: #6b7280;
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: 4px;
     }
+    .file-actions {
+      margin-top: auto; /* push actions to bottom */
+      display: flex;
+      gap: 8px;
+    }
+    .btn-icon {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+
+    .view-toggle {
+      text-align: right;
+    }
+    .view-toggle button {
+      border: none;
+      background: transparent;
+      color: #555;
+      font-size: 1.3rem;
+      margin-left: 8px;
+      transition: color 0.2s ease-in-out;
+    }
+    .view-toggle button.active {
+      color: #5c94d4;
+    }
+
     footer {
-      background: linear-gradient(90deg, #0d47a1, #1565c0);
-      color: #fff;
+      background: #1a1a1a;
+      color: #ccc;
       padding: 10px;
-      margin-top: auto;
-      border-top: 3px solid #42a5f5;
+      margin-top: auto; /* push footer to bottom */
+    }
+
+    table.file-list-table {
+      width: 100%;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    table.file-list-table th, table.file-list-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    table.file-list-table th {
+      background: #f8f9fa;
+      color: #555;
+      font-weight: 600;
+    }
+    table.file-list-table tr:hover {
+      background: #f3f6fa;
+      transition: 0.3s;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
     }
   </style>
 </head>
 
 <body>
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg px-3">
     <a class="navbar-brand" href="{{ url_for('home') }}">
       <i class="bi bi-folder2-open"></i> Case Study Manager
@@ -93,9 +159,8 @@
   </nav>
 
   <main class="container my-4">
-    <!-- Search & Filter -->
-    <div class="search-bar shadow-sm">
-      <form class="row g-3 align-items-center">
+    <div class="search-bar">
+      <form id="searchForm" class="row g-3 align-items-center" autocomplete="off">
         <div class="col-md-3">
           <select id="standardFilter" class="form-select">
             <option value="">All Standards</option>
@@ -108,49 +173,56 @@
           </select>
         </div>
         <div class="col-md-3">
-          <select id="industryFilter" class="form-select">
-            <option value="">All Industries</option>
+          <select id="verticalFilter" class="form-select">
+            <option value="">All Verticals</option>
             <option value="automotive">Automotive</option>
+            <option value="semiconductor">Semiconductor</option>
+            <option value="consumer">Consumer</option>
+            <option value="industrial">Industrial</option>
+            <option value="energy&utilites">Energy&utilities</option>
+            <option value="aerospace">Aerospace</option>
+            <option value="oil&gas">Oil&Gas</option>
+            <option value="healthcare">Healthcare</option>
             <option value="mechanical">Mechanical</option>
             <option value="powerelectronics">Power Electronics</option>
             <option value="electrical">Electrical</option>
-            <option value="semiconductor">Semiconductor</option>
           </select>
         </div>
         <div class="col-md-3">
           <input id="searchInput" type="text" class="form-control" placeholder="🔍 Search by title or description">
         </div>
-        <div class="col-md-3 text-end">
-          <button type="button" id="gridView" class="btn btn-light btn-sm active"><i class="bi bi-grid"></i></button>
-          <button type="button" id="listView" class="btn btn-light btn-sm"><i class="bi bi-list"></i></button>
+        <div class="col-md-3 view-toggle">
+          <button type="button" id="gridView" class="active"><i class="bi bi-grid"></i></button>
+          <button type="button" id="listView"><i class="bi bi-list"></i></button>
         </div>
       </form>
     </div>
 
     {% if results %}
-      <h5 class="mt-4 mb-3 text-secondary">📂 Found {{ results|length }} file(s)</h5>
+      <h5 class="mt-4 mb-3 text-secondary" id="resultCount">📂 Found {{ results|length }} file(s)</h5>
+      <p id="noResultsMsg" class="text-center text-muted" style="display:none;">No files match your search.</p>
 
       <!-- Grid View -->
       <div id="gridContainer" class="file-grid fade-in">
         {% for file in results %}
-          <div class="file-card"
-               data-title="{{ file.title|lower }}"
+          <div class="file-card" 
+               data-title="{{ file.title|lower }}" 
                data-description="{{ file.description|lower }}"
                data-standard="{{ file.standard|lower }}"
-               data-industry="{{ file.industry|lower }}">
+               data-vertical="{{ file.vertical|lower }}">
             <div class="file-icon"><i class="bi bi-file-earmark-text"></i></div>
             <div class="file-title">{{ file.title }}</div>
             <div class="file-meta">
-              {{ file.standard or 'no standard' }} • {{ file.industry or 'Unknown' }}<br>
-              {{ file.upload_date.strftime('%Y-%m-%d') }} • {{ file.file_size or '0' }} MB
+              {{ file.standard or 'No Standard' }} • {{ file.vertical or 'Unknown' }}<br>
+              {{ file.upload_date.strftime("%Y-%m-%d") }} • {{ file.file_size or '0' }} MB
             </div>
-            <div class="mt-2">
-              <a href="{{ url_for('case_download', case_study_id=file.id) }}" class="btn btn-success btn-sm">
+            <div class="file-actions">
+              <a href="{{ url_for('case_download', case_study_id=file.id) }}" class="btn btn-success btn-sm btn-icon">
                 <i class="bi bi-download"></i> Download
               </a>
               <form method="post" action="{{ url_for('case_delete', case_study_id=file.id) }}" class="d-inline"
                     onsubmit="return confirm('Delete this file?');">
-                <button type="submit" class="btn btn-danger btn-sm">
+                <button type="submit" class="btn btn-danger btn-sm btn-icon">
                   <i class="bi bi-trash"></i> Delete
                 </button>
               </form>
@@ -160,34 +232,34 @@
       </div>
 
       <!-- List View -->
-      <div id="listContainer" class="file-list fade-in" style="display:none;">
+      <div id="listContainer" class="file-list fade-in">
         <table class="table file-list-table">
           <thead>
             <tr>
               <th>Title</th>
               <th>Standard</th>
-              <th>Industry</th>
+              <th>Vertical</th>
               <th>Date</th>
               <th>Size (MB)</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {% for case_study in results %}
-              <tr data-title="{{ case_study.title|lower }}" 
-                  data-description="{{ case_study.description|lower }}"
-                  data-standard="{{ case_study.standard|lower }}"
-                  data-industry="{{ case_study.industry|lower }}">
-                <td>{{ case_study.title }}</td>
-                <td>{{ case_study.standard or '-' }}</td>
-                <td>{{ case_study.industry or '-' }}</td>
-                <td>{{ case_study.upload_date.strftime("%Y-%m-%d") }}</td>
-                <td>{{ case_study.file_size or '0' }}</td>
+            {% for file in results %}
+              <tr data-title="{{ file.title|lower }}" 
+                  data-description="{{ file.description|lower }}"
+                  data-standard="{{ file.standard|lower }}"
+                  data-vertical="{{ file.vertical|lower }}">
+                <td>{{ file.title }}</td>
+                <td>{{ file.standard or '-' }}</td>
+                <td>{{ file.vertical or '-' }}</td>
+                <td>{{ file.upload_date.strftime("%Y-%m-%d") }}</td>
+                <td>{{ file.file_size or '0' }}</td>
                 <td>
-                  <a href="{{ url_for('case_download', case_study_id=case_study.id) }}" class="btn btn-success btn-sm">
+                  <a href="{{ url_for('case_download', case_study_id=file.id) }}" class="btn btn-success btn-sm">
                     <i class="bi bi-download"></i>
                   </a>
-                  <form method="post" action="{{ url_for('case_delete', case_study_id=case_study.id) }}" class="d-inline"
+                  <form method="post" action="{{ url_for('case_delete', case_study_id=file.id) }}" class="d-inline"
                         onsubmit="return confirm('Delete this file?');">
                     <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
                   </form>
@@ -212,6 +284,8 @@
     const listBtn = document.getElementById("listView");
     const gridContainer = document.getElementById("gridContainer");
     const listContainer = document.getElementById("listContainer");
+    const countHeader = document.getElementById("resultCount");
+    const noResultsMsg = document.getElementById("noResultsMsg");
 
     gridBtn.addEventListener("click", () => {
       gridContainer.style.display = "grid";
@@ -229,44 +303,35 @@
       updateFileCount();
     });
 
-    // 🔍 Filters + Search
+    // 🔍 Filters
     const searchInput = document.getElementById("searchInput");
     const standardFilter = document.getElementById("standardFilter");
-    const industryFilter = document.getElementById("industryFilter");
+    const verticalFilter = document.getElementById("verticalFilter");
 
     function updateFileCount() {
-      const visibleCards = Array.from(document.querySelectorAll(".file-card")).filter(c => c.style.display !== "none");
-      const visibleRows = Array.from(document.querySelectorAll("#listContainer tbody tr")).filter(r => r.style.display !== "none");
+      const visibleCards = Array.from(document.querySelectorAll(".file-card")).filter(card => card.style.display !== "none");
+      const visibleRows = Array.from(document.querySelectorAll("#listContainer tbody tr")).filter(row => row.style.display !== "none");
       const visibleCount = gridContainer.style.display !== "none" ? visibleCards.length : visibleRows.length;
 
-      const countHeader = document.querySelector("h5.mt-4.mb-3.text-secondary");
       if (countHeader) countHeader.textContent = `📂 Found ${visibleCount} file(s)`;
-
-      const noResultMsg = document.querySelector(".no-results-message");
-      if (visibleCount === 0 && !noResultMsg) {
-        const msg = document.createElement("p");
-        msg.className = "text-center mt-4 text-muted no-results-message";
-        msg.textContent = "No files match your search.";
-        document.querySelector("main").appendChild(msg);
-      } else if (visibleCount > 0 && noResultMsg) {
-        noResultMsg.remove();
-      }
+      if (noResultsMsg) noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
     }
 
     function filterFiles() {
       const keyword = searchInput.value.toLowerCase();
       const standard = standardFilter.value.toLowerCase();
-      const industry = industryFilter.value.toLowerCase();
+      const vertical = verticalFilter.value.toLowerCase();
 
       document.querySelectorAll("[data-title]").forEach(item => {
         const title = item.dataset.title || "";
-        const desc = item.dataset.description || "";
+        const description = item.dataset.description || "";
         const std = item.dataset.standard || "";
-        const ind = item.dataset.industry || "";
-        const match =
-          (title.includes(keyword) || desc.includes(keyword)) &&
-          (standard === "" || std.includes(standard)) &&
-          (industry === "" || ind.includes(industry));
+        const ver = item.dataset.vertical || "";
+
+        const match = (title.includes(keyword) || description.includes(keyword)) &&
+                      (standard === "" || std.includes(standard)) &&
+                      (vertical === "" || ver.includes(vertical));
+
         item.style.display = match ? "" : "none";
       });
 
@@ -275,8 +340,7 @@
 
     searchInput.addEventListener("input", filterFiles);
     standardFilter.addEventListener("change", filterFiles);
-    industryFilter.addEventListener("change", filterFiles);
+    verticalFilter.addEventListener("change", filterFiles);
   </script>
 </body>
 </html>
-
